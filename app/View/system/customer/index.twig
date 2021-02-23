@@ -1,0 +1,64 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                    <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                    <li class="breadcrumb-item"><a href="#">Clientes</a></li>
+                    <li class="breadcrumb-item"><a href="#">Listagem Geral</a></li>
+                </ol>
+            </nav>
+            <h4 class="mg-b-0 tx-spacing--1">Lista de Clientes</h4>
+        </div>
+        <div class="">
+            <a href="{{ url_for('customer.form') }}" type="button" class="btn btn-lg btn-primary">Cadastrar Novo
+                Cliente</a>
+        </div>
+    </div>
+
+    <div data-label="Example" class="df-example demo-table">
+        <table id="list" class="table table-hover">
+            <thead>
+            <tr>
+                <th class="wd-20p">Nome</th>
+                <th class="wd-20p">Sobrenome</th>
+                <th class="wd-25p">CPF/CNPJ</th>
+                <th class="wd-20p">Ações</th>
+            </tr>
+            </thead>
+        </table>
+    </div><!-- df-example -->
+
+{% endblock %}
+
+
+{% block footer %}
+    <script src="/template/v1/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js"></script>
+    <script>
+        let table = $('#list').DataTable({
+            ajax: "{{ url_for('customer.search') }}",
+            columns: [
+                {"data": "Nome"},
+                {"data": "Sobrenome"},
+                {"data": "CPF/CNPJ"},
+                {"defaultContent": "<button class='btn btn-sm btn-primary'>Visualizar</button>", "class": 'text-center'}
+            ],
+            language: {
+                url: '/template/v1/assets/data/pt_BT.json'
+            }
+        });
+        $('#list tbody').on('click', 'button', function () {
+            let data = table.row($(this).parents('tr')).data();
+            window.location.href = '/system/customer/' + data['DT_RowId']
+        });
+    </script>
+{% endblock %}

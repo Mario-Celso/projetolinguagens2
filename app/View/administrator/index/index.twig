@@ -1,0 +1,55 @@
+{% extends "/template/administrator/template.twig" %}
+{% block content %}
+
+    <div class="card-deck mb-3 text-center">
+        Dashboard
+    </div>
+    <hr>
+    <br>
+
+    <div class="row row-xs">
+        <div class="col-sm-6 col-lg-4">
+            <div class="card card-body">
+                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Empresas</h6>
+                <div class="d-flex d-lg-block d-xl-flex align-items-end">
+                    <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{companies}}</h3>
+                    <a class="tx-11 tx-color-03 mg-b-0" href="{{ url_for('manager.companies')}}"> <span class="tx-medium tx-success"> abrir todos </span> </a>
+                </div>
+                <div class="chart-three">
+                    <div id="flotChart3" class="flot-chart ht-30"></div>
+                </div><!-- chart-three -->
+            </div>
+        </div><!-- col -->
+        <div class="col-sm-6 col-lg-4 mg-t-10 mg-sm-t-0">
+            <div class="card card-body">
+                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Usuários</h6>
+                <div class="d-flex d-lg-block d-xl-flex align-items-end">
+                    <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{users}}</h3>
+                    <a class="tx-11 tx-color-03 mg-b-0" href="{{ url_for('manager.user.index')}}"> <span class="tx-medium tx-success"> abrir todos </span> </a>
+                </div>
+                <div class="chart-three">
+                    <div id="flotChart4" class="flot-chart ht-30"></div>
+                </div><!-- chart-three -->
+            </div>
+        </div><!-- col -->
+        <div class="col-sm-6 col-lg-4 mg-t-10 mg-lg-t-0">
+            <div class="card card-body">
+                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Administradores</h6>
+                <div class="d-flex d-lg-block d-xl-flex align-items-end">
+                    <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{administrators}}</h3>
+                    <a class="tx-11 tx-color-03 mg-b-0" href="{{ url_for('manager.administrator.index')}}"> <span class="tx-medium tx-success"> abrir todos </span> </a>
+                </div>
+                <div class="chart-three">
+                    <div id="flotChart5" class="flot-chart ht-30"></div>
+                </div><!-- chart-three -->
+            </div>
+        </div><!-- col -->
+    </div><!-- row -->
+
+
+{% endblock %}
+
+
+{% block footer %}
+
+{% endblock %}

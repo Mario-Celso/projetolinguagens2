@@ -1,0 +1,28 @@
+{% extends "/template/administrator/template.twig" %}
+
+{% block content %}
+
+    {% include '/template/flash_message.twig' %}
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h2 class="h4">Formulário de cadastro de Empresa</h2>
+        <form action="{{ url_for('manager.companies.post') }}" method="post">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group mb-20">
+                        <input placeholder="Nome" id="name" name="name" class="form-control" required aria-required="true" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group mb-20">
+                        <input placeholder="Documento" id="document" name="document" class="form-control" required aria-required="true" type="text">
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end ">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

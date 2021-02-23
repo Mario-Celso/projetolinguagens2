@@ -1,0 +1,100 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                    <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                    <li class="breadcrumb-item"><a href="#">Apolices</a></li>
+                    <li class="breadcrumb-item"><a href="#">Listagem Geral</a></li>
+                </ol>
+            </nav>
+            <h4 class="mg-b-0 tx-spacing--1">Lista de Apólices</h4>
+        </div>
+        <div class="">
+            <a href="{{ url_for('policy.form')}}" type="button" class="btn btn-lg btn-primary">Cadastrar Nova Apólice</a>
+        </div>
+    </div>
+    <div class="col-12">
+        <form method="get" action="{{ url_for('policy.list') }}">
+            <div class="form-row">
+                <div class="col-md-2 mb-6">
+                    <input type="text" class="form-control"  data-mask="00/00/0000" name="start" value="{{ start|date("d/m/Y") }}">
+                </div>
+                <div class="col-md-1 mb-1 text-center">
+                    até
+                </div>
+                <div class="col-md-2 mb-6">
+                    <input type="text" class="form-control" data-mask="00/00/0000"  name="end" value="{{ end|date("d/m/Y") }}">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" type="submit"> Pesquisar</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <br>
+    <hr>
+    <div data-label="Example" class="df-example demo-table">
+        <table id="list" class="table table-hover">
+            <thead>
+            <tr>
+                <th class="wd-10p">Id</th>
+                <th class="wd-15p">Cliente</th>
+                <th class="wd-15p">CPF/CNPJ</th>
+                <th class="wd-15p">Apólice</th>
+                <th class="wd-15p">Seguradora</th>
+                <th class="wd-15p">Aberto em</th>
+{#                <th class="wd-15p">Vencimento</th>#}
+                <th class="wd-15p">Ações</th>
+            </tr>
+            </thead>
+        </table>
+    </div><!-- df-example -->
+
+{% endblock %}
+
+{% block footer %}
+    <script src="/template/v1/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js"></script>
+    <script>
+        let url = "{{ url_for('policy.search')}}";
+        let query = '{{ query }}';
+
+        if (query){
+            newUrl = "{{ url_for('policy.search') }}?{{query}}";
+
+            url = newUrl.replace("&amp;", "&")
+        }
+
+        let table = $('#list').DataTable({
+            ajax: url,
+            columns: [
+                { "data": "Id" },
+                { "data": "Cliente" },
+                { "data": "CPF/CNPJ" },
+                { "data": "Apólice" },
+                { "data": "Seguradora" },
+                { "data": "Aberto_em" },
+                // { "data": "Vencimento" },
+                { "defaultContent": "<button class='btn btn-sm btn-primary'>Visualizar</button>"}
+            ],
+            language: {
+                url: '/template/v1/assets/data/pt_BT.json'
+            }
+        });
+        $('#list tbody').on('click', 'button', function () {
+            let data = table.row($(this).parents('tr')).data();
+            window.location.href = '/system/proposal/insurance_policy/view/' + data['DT_RowId']
+        });
+    </script>
+{% endblock %}

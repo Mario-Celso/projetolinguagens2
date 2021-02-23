@@ -1,0 +1,146 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <form id="form-register" action="{{ url_for("claim.post") }}" method="post" enctype="multipart/form-data">
+
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                        <li class="breadcrumb-item"><a href="#">Sinistro</a></li>
+                        <li class="breadcrumb-item"><a href="#">Formulário</a></li>
+                    </ol>
+                </nav>
+                <h4 class="mg-b-0 tx-spacing--1">Formulário de Sinistro</h4>
+            </div>
+            <div class="">
+                <button class="btn btn-lg btn-primary">Salvar Sinistro</button>
+            </div>
+        </div>
+
+        <fieldset class="form-fieldset">
+            <legend>Informações Gerais</legend>
+            <div class="form-row">
+                <div class="form-group reqired form-group-default col-md-7 form-group-default-select2">
+                    <label>Cliente (CPF/CNPJ) - Apolice </label>
+                    <select class="custom-select select2-test" required="" name="hash_policy">
+                        <option value="" disabled="" selected=""> -- Escolha pelo nome ou número da apólice --</option>
+                        {% for policy in policies %}
+                            <option value="{{ policy.hash }}">{{ policy.customer.firstName }} {{ policy.customer.lastName }}
+                                (CPF/CNPJ {{policy.customer.document}} ) - #n{{ policy.getId }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Status</label>
+                    <select class="custom-select" required="" name="status">
+                        <option value='0'>Aberta/Em andamento</option>
+                        <option value='1'>Finalizada</option>
+                        <option value='2'>Cancelada</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <br>
+
+        <div class="row">
+            <div class="col-lg-10 text-right">
+                <button type="button" class="btn btn-sm btn-info btn_fieldset_obs">Observação</button>
+            </div>
+        </div>
+        <fieldset class="form-fieldset fieldset_obs">
+            <legend>Observações</legend>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Observação</label>
+                    <input type="text" class="form-control" name="obstitle[0]">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Data da Observação</label>
+                    <input type="text" data-mask="00/00/0000" class="form-control" value="{{ "now"|date("d/m/Y") }}" name="date[0]">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label></label>
+                    <textarea type="text" class="form-control" rows="3" name="observation[0]"></textarea>
+                </div>
+            </div>
+            <br>
+        </fieldset>
+
+        <br>
+
+        <div class="row">
+            <div class="col-lg-10 text-right">
+                <button type="button" class="btn btn-sm btn-info btn_fieldset_third"
+                >Segurado Terceiro</button>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                <button class="btn btn-lg btn-primary">Salvar Sinistro</button>
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}
+
+{% block header %}
+    <link href="/template/v1/lib/select2/css/select2.min.css" rel="stylesheet" type="text/css"
+          media="screen"/>
+{% endblock %}
+
+{% block footer %}
+    <script src="/template/v1/lib/select2/js/select2.full.min.js"></script>
+    <script src="/template/v1/lib/jquery-validation/js/jquery.validate.js"></script>
+    <script src="/template/v1/lib/jquery-validation/js/localization/messages_pt_BR.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2-test').select2();
+        });
+    </script>
+    <script src="/wt2/js/system.js"></script>
+    <script src="/wt2/js/cpf.js"></script>
+
+    <script>
+        cpfCnpj();
+
+        $('.fieldset_obs').metalClone({
+            btnClone 	: '.btn_fieldset_obs',
+            btnRemoveClass: 'btn btn-danger btn-sm',
+            confirmMessageText: 'Deseja mesmo apagar?',
+            onComplete: function (e, o, c) {
+                let cc = 0;
+                $('.fieldset_obs').each(function (i) { cc = eval(cc + 1); })
+                $(c[0]).find(':input').each(function (ee) {
+                    if($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                })
+            }
+        });
+
+        $('.fieldset_third').metalClone({
+            btnClone 	: '.btn_fieldset_third',
+            btnRemoveClass: 'btn btn-danger btn-sm',
+            confirmMessageText: 'Deseja mesmo apagar?',
+            onComplete: function (e, o, c) {
+                let cc = 0;
+                $('.fieldset_third').each(function (i) { cc = eval(cc + 1); })
+                $(c[0]).find(':input').each(function (ee) {
+                    if($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                })
+            }
+        });
+
+        $("#form-register").validate();
+    </script>
+{% endblock %}

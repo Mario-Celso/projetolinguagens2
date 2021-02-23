@@ -1,0 +1,288 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <form id="form-update" action="{{ url_for("claim.put", {'hash_claim' : claim.hash}) }}" method="post" enctype="multipart/form-data">
+
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                        <li class="breadcrumb-item"><a href="#">Sinistro</a></li>
+                        <li class="breadcrumb-item"><a href="#">Formulário</a></li>
+                    </ol>
+                </nav>
+                <h4 class="mg-b-0 tx-spacing--1">Formulário da Sinistro</h4>
+            </div>
+            <div class="">
+                <button hidden class="btn btn-lg btn-primary">Salvar Sinistro</button>
+            </div>
+
+            <div id="edit" class="">
+                <button id="removeDisabled" class="btn btn-lg btn-primary">Editar</button>
+            </div>
+        </div>
+
+        <fieldset class="form-fieldset">
+            <legend>Informações Gerais</legend>
+            <div class="form-row">
+                <div class="form-group form-group-default col-md-4">
+                    <label>Cliente</label>
+                    <p><b>{{ claim.customer.firstName }} {{ claim.customer.lastName }}</b></p>
+                </div>
+                <div class="form-group form-group-default col-md-3">
+                    <label>CPF/CNPJ</label>
+                    <p><b>{{ claim.customer.document }}</b></p>
+                </div>
+                <div class="form-group form-group-default col-md-2">
+                    <label>Apólice</label>
+                    <p><b>{{ claim.policy.policyNumber }}</b></p>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Status</label>
+                    <select disabled class="custom-select" required="" name="status">
+                        <option {% if claim.getStatus == 0 %} selected {% endif %} value='0'>Aberta/Em andamento
+                        </option>
+                        <option {% if claim.getStatus == 1 %} selected {% endif %} value='1'>Finalizada</option>
+                        <option {% if claim.getStatus == 2 %} selected {% endif %} value='2'>Cancelada</option>
+                        <option {% if claim.getStatus == 3 %} selected {% endif %} value='3'>Deletada</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <br>
+
+        <div class="row">
+            <div class="col-lg-10 text-right">
+                <button hidden type="button" class="btn btn-sm btn-info btn_fieldset_obs">Observação</button>
+            </div>
+        </div>
+        {% set number = 1 %}
+        {% for observation in claim.observations %}
+        <fieldset class="form-fieldset" id="{{ observation.hash }}">
+            <legend>Observações</legend>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>{{ number }} - Observação</label>
+                        <input readonly type="text" class="form-control" name="obstitle[{{ observation.hash }}]"
+                               value="{{ observation.title }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Data da Observação</label>
+                        <input readonly type="text" data-mask="00/00/0000" class="form-control"
+                               name="date[{{ observation.getHash }}]" value="{{ observation.date|date("d/m/Y") }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label></label>
+                        <textarea readonly type="text" class="form-control" rows="3"
+                                  name="observation[{{ observation.hash }}]">{{ observation.observation }}</textarea>
+                    </div>
+                </div>
+        </fieldset>
+            <br>
+            {% set number = number + 1 %}
+        {% endfor %}
+        <fieldset class="form-fieldset fieldset_obs">
+            <legend>Observações</legend>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Observação</label>
+                    <input readonly type="text" class="form-control" name="obstitle[0]">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Data da Observação</label>
+                    <input readonly type="text" data-mask="00/00/0000" class="form-control" value="{{ "now"|date("d/m/Y") }}" name="date[0]">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label></label>
+                    <textarea readonly type="text" class="form-control" rows="3" name="observation[0]"></textarea>
+                </div>
+            </div>
+            <br>
+        </fieldset>
+        <br>
+        <fieldset class="form-fieldset fieldset_doc">
+            <legend>Documentos</legend>
+            <div class="file-loading">
+                <input id="kv-explorer" type="file" multiple>
+            </div>
+        </fieldset>
+
+        <br>
+
+        <div class=""  style="text-align: right">
+            <a href="{{ url_for('claim-third.form',  {'hash_claim' : claim.hash}) }}"
+               type="button" class="btn btn-lg btn-secondary">Cadastrar Sinistro Terceiro</a>
+        </div>
+        <fieldset class="form-fieldset fieldset_doc">
+            <legend>Sinistro Tercerio</legend>
+            <table id="list" class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th class="">Nome</th>
+                    <th class="">CPF/CNPJ</th>
+                    <th class=""></th>
+                    <th class=""></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for third in claimThird %}
+                    <tr>
+                        <td>{{ third.name }}</td>
+                        <td>{{ third.documentIdentifier}}</td>
+                        <td>
+                            <a class="btn btn-sm btn-warning"
+                               href="{{ url_for('claim-third.get', {'hash_third' : third.hash}) }}" role="button">Abrir</a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger button_delete_claim_third" data-href="{{ url_for('claim-third.delete',
+                                {'hash_third' : third.hash})}}" role="button">Deletar</button>
+                        </td>
+                    </tr>
+                {% else %}
+                    <td colspan="5" class="text-center text-danger">Não há nenhum sinistro terceiro cadastrado</td>
+                {% endfor %}
+                </tbody>
+            </table>
+        </fieldset>
+
+
+            <br>
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <button hidden class="btn btn-lg btn-primary">Salvar Sinistro</button>
+                </div>
+            </div>
+
+
+    </form>
+
+{% endblock %}
+
+{% block header %}
+    <link href="/template/v1/lib/select2/css/select2.min.css" rel="stylesheet" type="text/css"
+          media="screen"/>
+{% endblock %}
+
+{% block footer %}
+    <script src="/template/v1/lib/select2/js/select2.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="/template/v1/lib/jquery-validation/js/localization/messages_pt_BR.js"></script>
+    <script src="/template/v1/lib/jquery-validation/js/jquery.validate.js"></script>
+    <script src="/wt2/js/cpf.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.select2-test').select2();
+        });
+    </script>
+    <script src="/wt2/js/system.js"></script>
+    <script src="/wt2/js/editForm.js"></script>
+    <script>
+        let docMask = function (val) {
+                return val.replace(/\D/g, '').length <= 11 ? '000.000.000-009' : '00.000.000/0000-00';
+            },
+            docOptions = {
+                onKeyPress: function(val, e, field, options) {
+                    field.mask(docMask.apply({}, arguments), options);
+                }
+            };
+
+        $(function() {
+            $(':input[name=third_party_documents]').mask(docMask, docOptions);
+        });
+
+        $(".button_delete_claim_third").click(function () {
+            var data_url = $(this).attr('data-href');
+            Swal.fire({
+                title: 'Deseja mesmo excluir?',
+                text: "Não poderá retornar a execução.",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, quero excluir!',
+                cancelButtonText: 'Cancelar',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return fetch($.ajax({
+                        url: data_url,
+                        method: 'GET',
+                        success: function (data) {
+                            if (data) {
+                                alert('Terceiro excluído')
+                            }
+                        }
+                    })).then(response => {
+                        location.reload(false)
+                    }).catch(error => {
+                        location.reload(false)
+                    })
+
+                }
+            });
+        });
+
+        $('.fieldset_obs').metalClone({
+            btnClone 	: '.btn_fieldset_obs',
+            btnRemoveClass: 'btn btn-danger btn-sm',
+            confirmMessageText: 'Deseja mesmo apagar?',
+            onComplete: function (e, o, c) {
+                let cc = 0;
+                $('.fieldset_obs').each(function (i) {
+                    cc = eval(cc + 1);
+                })
+                $(c[0]).find(':input').each(function (ee) {
+                    if ($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                })
+            }
+        });
+
+        const footerTemplate = '<div class="file-thumbnail-footer" style ="height:94px">\n' +
+            '  <input id="{document_id}" class="kv-input kv-new form-control input-sm form-control-sm text-center {TAG_CSS_NEW}" ' +
+            'value="{caption}" name="title[{document_id}]" placeholder="Enter caption...">\n' +
+            '   <div class="small" style="margin:15px 0 2px 0">{size}</div> {progress}\n{indicator}\n{actions}\n' +
+            '</div>';
+
+        const footerTemplateThird = '<div class="file-thumbnail-footer" style ="height:94px">\n' +
+            '  <input class="kv-input kv-new form-control input-sm form-control-sm text-center {TAG_CSS_NEW}" ' +
+            'value="{caption}" name="title_third[{document_id}]" placeholder="Enter caption...">\n' +
+            '   <div class="small" style="margin:15px 0 2px 0">{size}</div> {progress}\n{indicator}\n{actions}\n' +
+            '</div>';
+
+        $("#kv-explorer").fileinput({
+            initialPreview: {{ preview|raw }},
+            initialPreviewConfig: {{ previewConfig|raw }},
+            layoutTemplates: {footer: footerTemplate},
+            allowedPreviewTypes: ['image', 'pdf', 'video', 'office'],
+            'theme': 'fas',
+            'uploadUrl': "{{ url_for('upload.claim', {hash: claim.hash} ) }}",
+            'deleteUrl': "{{ url_for('file.delete', {type: 'insurance'}) }}",
+            previewFileIcon: '<i class="fas fa-file"></i>',
+            previewFileIconSettings: {
+                'docx': '<i class="fas fa-file-word text-primary"></i>'
+            },
+            initialPreviewThumbTags : {{ initialPreviewThumbTags|raw }},
+            language: 'pt-BR',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+        });
+
+
+
+
+
+        $("#form-update").validate();
+    </script>
+{% endblock %}
+

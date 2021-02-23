@@ -1,0 +1,34 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Perfil{% endblock %}
+
+
+{% block content %}
+    <div class="form-group col-md-12 form-group-default-select2">
+        <h3>Mudar Senha</h3>
+    </div>
+
+    <form action="{{ url_for("user-password.put", {'hash' : session.hash}) }}" method="post" enctype="multipart/form-data">
+
+        <div class="form-group col-md-5 form-group-default-select2">
+            <label>Senha Atual</label>
+            <input type="text" class="form-control" name="old_password" id="old_password">
+        </div>
+        <div class="form-group col-md-5 form-group-default-select2">
+            <label>Senha Nova</label>
+            <input type="text" class="form-control" name="new_password" id="new_password">
+        </div>
+        <div class="form-group col-md-5 form-group-default-select2">
+            <label>Confirmação da Nova Senha</label>
+            <input type="text" class="form-control" name="new_password_confirmation" id="new_password_confirmation">
+        </div>
+
+
+        <div class="form-group col-md-1 form-group-default-select2">
+            <button type="submit" class="btn btn-lg btn-primary">Salvar</button>
+        </div>
+
+
+    </form>
+
+{% endblock %}

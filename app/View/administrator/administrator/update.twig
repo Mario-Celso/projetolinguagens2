@@ -1,0 +1,51 @@
+{% extends "/template/administrator/template.twig" %}
+
+{% block content %}
+
+    {% include '/template/flash_message.twig' %}
+    <h4 class="mg-b-0 tx-spacing--1">Mudar Dados</h4>
+
+    <form action="{{ url_for('manager.administrator.put', {'hash_adm' : adm.hash}) }}" method="post" enctype="multipart/form-data">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-20">
+                    <label>Nome</label>
+                    <input placeholder="Nome"  name="name" class="form-control" required aria-required="true" type="text" value="{{ adm.name }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-20">
+                    <label>User</label>
+                    <input placeholder="User"  name="user" class="form-control" required aria-required="true" type="text" value="{{ adm.user }}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-20">
+                    <label>E-mail</label>
+                    <input placeholder="E-mail"  name="email" class="form-control" required aria-required="true" type="text" value="{{ adm.email }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-20">
+                    <label>Status</label>
+                    <select class="custom-select select2-test" required="" name="status">
+                        <option  value="1" {% if adm.status == 1 %} selected="selected" {% endif %}>
+                            Ativo
+                        </option>
+                        <option value="0" {% if adm.status == 0 %} selected="selected" {% endif %} >
+                            Desativado
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: right;" class="">
+            <button class="btn btn-primary">Salvar Dados</button>
+        </div>
+    </form>
+
+{% endblock %}

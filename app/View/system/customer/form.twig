@@ -1,0 +1,667 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <form id="form-register" action="/system/customer/register" method="post" enctype="multipart/form-data">
+
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                        <li class="breadcrumb-item"><a href="#">Clientes</a></li>
+                        <li class="breadcrumb-item"><a href="#">Formulário</a></li>
+                    </ol>
+                </nav>
+                <h4 class="mg-b-0 tx-spacing--1">Formulário do Cliente</h4>
+            </div>
+            <div class="">
+                <button class="btn btn-lg btn-primary">Salvar Cliente</button>
+            </div>
+        </div>
+
+        <fieldset class="form-fieldset">
+            <legend>Informações Gerais</legend>
+            <div class="form-row">
+                <div class="form-group col-md-6 required">
+                    <label>Nome/Razão Social</label>
+                    <input type="text" class="form-control" name="first_name" required>
+                </div>
+                <div class="form-group col-md-6 required">
+                    <label>Sobrenome/Nome Fantasia</label>
+                    <input type="text" class="form-control" name="last_name" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3 required">
+                    <label>CPF/CNPJ</label>
+                    <input type="document" class="form-control cpfcnpj" name="document" required>
+                </div>
+                <div class="form-group required col-md-3">
+                    <label>Data Aniversário</label>
+                    <input type="text" class="form-control" data-mask="00/00/0000" required name="birthday">
+                </div>
+                <div class="form-group required col-md-3">
+                    <label>Sexo</label>
+                    <select class="custom-select" required name="gender">
+                        <option value="" disabled="" selected=""> -- Escolha --</option>
+                        <option value="F">Feminino</option>
+                        <option value="M">Masculino</option>
+                    </select>
+                </div>
+                <div class="form-group required col-md-3">
+                    <label>Estado Civil</label>
+                    <select class="custom-select" required name="civil_status">
+                        <option value="" disabled="" selected=""> -- Escolha --</option>
+                        <option value="1">Solteiro</option>
+                        <option value="2">Casado</option>
+                        <option value="3">Separado</option>
+                        <option value="4">Divorciado</option>
+                        <option value="5">Viúvo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group required col-md-3">
+                    <label>CNH</label>
+                    <input type="text" class="form-control" required name="document_cnh" maxlength="60">
+                </div>
+                <div class="form-group required col-md-3">
+                    <label>Primeira Habilitação</label>
+                    <input type="text" data-mask="00/00/0000" class="form-control" required name="first_cnh_date">
+                </div>
+                <div class="form-group required col-md-3">
+                    <label>Data Emissão</label>
+                    <input type="text" data-mask="00/00/0000" class="form-control" required name="emission_cnh_date">
+                </div>
+                <div class="form-group required col-md-3">
+                    <label>Data Vencimento</label>
+                    <input type="text" data-mask="00/00/0000" class="form-control" required name="cnh_due_date">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>RG</label>
+                    <input type="text" class="form-control" required name="document_rg">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Orgão Expedidor</label>
+                    <input type="text" class="form-control" required name="document_rg_origin">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Data de Expedição</label>
+                    <input type="text" data-mask="00/00/0000"
+                           class="form-control" name="document_rg_date">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group required col-md-6">
+                    <label>Profissão</label>
+                    <input type="text" class="form-control" required name="profession">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Observações</label>
+                    <textarea type="text" class="form-control" rows="3" name="observation"></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <br>
+        <div class="row">
+            <div class="col-lg-10 text-right">
+                <button type="button" class="btn btn-sm btn-info btn_fieldset_bank">Banco</button>
+            </div>
+        </div>
+        <fieldset class="form-fieldset fieldset_bank">
+            <legend>Bancos</legend>
+            <div class="form-row">
+                <div class="form-group form-group-default col-md-8 form-group-default-select2">
+                    <label>Banco</label>
+                    <select class="custom-select select2-test" name="banks[0][bank]">
+                        <option value="" disabled="" selected=""> -- Escolha --</option>
+                        <option value="332"> 332-Acesso Soluções de Pagamento S.A.</option>
+                        <option value="117"> 117-ADVANCED CORRETORA DE CÂMBIO LTDA</option>
+                        <option value="272"> 272-AGK CORRETORA DE CAMBIO S.A.</option>
+                        <option value="349"> 349-AMAGGI S.A. - CRÉDITO, FINANCIAMENTO E INVESTIMENTO</option>
+                        <option value="188"> 188-ATIVA INVESTIMENTOS S.A. CORRETORA DE TÍTULOS, CÂMBIO E VALORES
+                        </option>
+                        <option value="280"> 280-Avista S.A. Crédito, Financiamento e Investimento</option>
+                        <option value="080"> 080-B&T CORRETORA DE CAMBIO LTDA.</option>
+                        <option value="654"> 654-Banco A.J.Renner S.A.</option>
+                        <option value="246"> 246-Banco ABC Brasil S.A.</option>
+                        <option value="075"> 075-Banco ABN AMRO S.A.</option>
+                        <option value="121"> 121-Banco Agibank S.A.</option>
+                        <option value="025"> 025-Banco Alfa S.A.</option>
+                        <option value="065"> 065-Banco Andbank (Brasil) S.A.</option>
+                        <option value="213"> 213-Banco Arbi S.A.</option>
+                        <option value="096"> 096-Banco B3 S.A.</option>
+                        <option value="024"> 024-Banco BANDEPE S.A.</option>
+                        <option value="330"> 330-Banco Bari de Investimentos e Financiamentos S/A</option>
+                        <option value="318"> 318-Banco BMG S.A.</option>
+                        <option value="752"> 752-Banco BNP Paribas Brasil S.A.</option>
+                        <option value="107"> 107-Banco BOCOM BBM S.A.</option>
+                        <option value="063"> 063-Banco Bradescard S.A.</option>
+                        <option value="036"> 036-Banco Bradesco BBI S.A.</option>
+                        <option value="122"> 122-Banco Bradesco BERJ S.A.</option>
+                        <option value="394"> 394-Banco Bradesco Financiamentos S.A.</option>
+                        <option value="237"> 237-Banco Bradesco S.A.</option>
+                        <option value="218"> 218-Banco BS2 S.A.</option>
+                        <option value="208"> 208-Banco BTG Pactual S.A.</option>
+                        <option value="336"> 336-Banco C6 S.A.</option>
+                        <option value="473"> 473-Banco Caixa Geral - Brasil S.A.</option>
+                        <option value="412"> 412-Banco Capital S.A.</option>
+                        <option value="040"> 040-Banco Cargill S.A.</option>
+                        <option value="739"> 739-Banco Cetelem S.A.</option>
+                        <option value="233"> 233-Banco Cifra S.A.</option>
+                        <option value="745"> 745-Banco Citibank S.A.</option>
+                        <option value="241"> 241-Banco Clássico S.A.</option>
+                        <option value="756"> 756-Banco Cooperativo do Brasil S.A. - BANCOOB</option>
+                        <option value="748"> 748-Banco Cooperativo Sicredi S.A.</option>
+                        <option value="222"> 222-Banco Credit Agricole Brasil S.A.</option>
+                        <option value="505"> 505-Banco Credit Suisse (Brasil) S.A.</option>
+                        <option value="069"> 069-Banco Crefisa S.A.</option>
+                        <option value="266"> 266-Banco Cédula S.A.</option>
+                        <option value="003"> 003-Banco da Amazônia S.A.</option>
+                        <option value="083"> 083-Banco da China Brasil S.A.</option>
+                        <option value="707"> 707-Banco Daycoval S.A.</option>
+                        <option value="300"> 300-Banco de La Nacion Argentina</option>
+                        <option value="495"> 495-Banco de La Provincia de Buenos Aires</option>
+                        <option value="335"> 335-Banco Digio S.A.</option>
+                        <option value="001"> 001-Banco do Brasil S.A.</option>
+                        <option value="047"> 047-Banco do Estado de Sergipe S.A.</option>
+                        <option value="037"> 037-Banco do Estado do Pará S.A.</option>
+                        <option value="041"> 041-Banco do Estado do Rio Grande do Sul S.A.</option>
+                        <option value="004"> 004-Banco do Nordeste do Brasil S.A.</option>
+                        <option value="265"> 265-Banco Fator S.A.</option>
+                        <option value="224"> 224-Banco Fibra S.A.</option>
+                        <option value="626"> 626-Banco Ficsa S.A.</option>
+                        <option value="094"> 094-Banco Finaxis S.A.</option>
+                        <option value="612"> 612-Banco Guanabara S.A.</option>
+                        <option value="012"> 012-Banco Inbursa S.A.</option>
+                        <option value="604"> 604-Banco Industrial do Brasil S.A.</option>
+                        <option value="653"> 653-Banco Indusval S.A.</option>
+                        <option value="077"> 077-Banco Inter S.A.</option>
+                        <option value="249"> 249-Banco Investcred Unibanco S.A.</option>
+                        <option value="479"> 479-Banco ItauBank S.A</option>
+                        <option value="184"> 184-Banco Itaú BBA S.A.</option>
+                        <option value="029"> 029-Banco Itaú Consignado S.A.</option>
+                        <option value="376"> 376-Banco J. P. Morgan S.A.</option>
+                        <option value="074"> 074-Banco J. Safra S.A.</option>
+                        <option value="217"> 217-Banco John Deere S.A.</option>
+                        <option value="076"> 076-Banco KDB S.A.</option>
+                        <option value="757"> 757-Banco KEB HANA do Brasil S.A.</option>
+                        <option value="600"> 600-Banco Luso Brasileiro S.A.</option>
+                        <option value="389"> 389-Banco Mercantil do Brasil S.A.</option>
+                        <option value="370"> 370-Banco Mizuho do Brasil S.A.</option>
+                        <option value="746"> 746-Banco Modal S.A.</option>
+                        <option value="066"> 066-Banco Morgan Stanley S.A.</option>
+                        <option value="456"> 456-Banco MUFG Brasil S.A.</option>
+                        <option value="243"> 243-Banco Máxima S.A.</option>
+                        <option value="007"> 007-Banco Nacional de Desenvolvimento Econômico e Social - BNDES</option>
+                        <option value="169"> 169-Banco Olé Bonsucesso Consignado S.A.</option>
+                        <option value="079"> 079-Banco Original do Agronegócio S.A.</option>
+                        <option value="212"> 212-Banco Original S.A.</option>
+                        <option value="712"> 712-Banco Ourinvest S.A.</option>
+                        <option value="623"> 623-Banco PAN S.A.</option>
+                        <option value="611"> 611-Banco Paulista S.A.</option>
+                        <option value="643"> 643-Banco Pine S.A.</option>
+                        <option value="747"> 747-Banco Rabobank International Brasil S.A.</option>
+                        <option value="633"> 633-Banco Rendimento S.A.</option>
+                        <option value="741"> 741-Banco Ribeirão Preto S.A.</option>
+                        <option value="120"> 120-Banco Rodobens S.A.</option>
+                        <option value="422"> 422-Banco Safra S.A.</option>
+                        <option value="033"> 033-Banco Santander (Brasil) S.A.</option>
+                        <option value="743"> 743-Banco Semear S.A.</option>
+                        <option value="754"> 754-Banco Sistema S.A.</option>
+                        <option value="630"> 630-Banco Smartbank S.A.</option>
+                        <option value="366"> 366-Banco Société Générale Brasil S.A.</option>
+                        <option value="637"> 637-Banco Sofisa S.A.</option>
+                        <option value="464"> 464-Banco Sumitomo Mitsui Brasileiro S.A.</option>
+                        <option value="082"> 082-Banco Topázio S.A.</option>
+                        <option value="018"> 018-Banco Tricury S.A.</option>
+                        <option value="634"> 634-Banco Triângulo S.A.</option>
+                        <option value="655"> 655-Banco Votorantim S.A.</option>
+                        <option value="610"> 610-Banco VR S.A.</option>
+                        <option value="119"> 119-Banco Western Union do Brasil S.A.</option>
+                        <option value="124"> 124-Banco Woori Bank do Brasil S.A.</option>
+                        <option value="348"> 348-Banco XP S.A.</option>
+                        <option value="081"> 081-BancoSeguro S.A.</option>
+                        <option value="021"> 021-BANESTES S.A. Banco do Estado do Espírito Santo</option>
+                        <option value="755"> 755-Bank of America Merrill Lynch Banco Múltiplo S.A.</option>
+                        <option value="268"> 268-BARI COMPANHIA HIPOTECÁRIA</option>
+                        <option value="250"> 250-BCV - Banco de Crédito e Varejo S.A.</option>
+                        <option value="144"> 144-BEXS Banco de Câmbio S.A.</option>
+                        <option value="253"> 253-Bexs Corretora de Câmbio S/A</option>
+                        <option value="134"> 134-BGC LIQUIDEZ DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA
+                        </option>
+                        <option value="017"> 017-BNY Mellon Banco S.A.</option>
+                        <option value="301"> 301-BPP Instituição de Pagamento S.A.</option>
+                        <option value="126"> 126-BR Partners Banco de Investimento S.A.</option>
+                        <option value="070"> 070-BRB - Banco de Brasília S.A.</option>
+                        <option value="092"> 092-Brickell S.A. Crédito</option>
+                        <option value="173"> 173-BRL Trust Distribuidora de Títulos e Valores Mobiliários S.A.</option>
+                        <option value="142"> 142-Broker Brasil Corretora de Câmbio Ltda.</option>
+                        <option value="292"> 292-BS2 Distribuidora de Títulos e Valores Mobiliários S.A.</option>
+                        <option value="104"> 104-Caixa Econômica Federal</option>
+                        <option value="309"> 309-CAMBIONET CORRETORA DE CÂMBIO LTDA.</option>
+                        <option value="288"> 288-CAROL DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.</option>
+                        <option value="130"> 130-CARUANA S.A. - SOCIEDADE DE CRÉDITO, FINANCIAMENTO E INVESTIMENTO
+                        </option>
+                        <option value="159"> 159-Casa do Crédito S.A. Sociedade de Crédito ao Microempreendedor</option>
+                        <option value="114"> 114-Central Cooperativa de Crédito no Estado do Espírito Santo - CECOOP
+                        </option>
+                        <option value="091"> 091-CENTRAL DE COOPERATIVAS DE ECONOMIA E CRÉDITO MÚTUO DO ESTADO DO RIO
+                            GRANDE DO S
+                        </option>
+                        <option value="320"> 320-China Construction Bank (Brasil) Banco Múltiplo S.A.</option>
+                        <option value="477"> 477-Citibank N.A.</option>
+                        <option value="180"> 180-CM CAPITAL MARKETS CORRETORA DE CÂMBIO, TÍTULOS E VALORES MOBILIÁRIOS
+                            LTDA
+                        </option>
+                        <option value="127"> 127-Codepe Corretora de Valores e Câmbio S.A.</option>
+                        <option value="163"> 163-Commerzbank Brasil S.A. - Banco Múltiplo</option>
+                        <option value="133"> 133-CONFEDERAÇÃO NACIONAL DAS COOPERATIVAS CENTRAIS DE CRÉDITO E ECONOMIA
+                            FAMILIAR E
+                        </option>
+                        <option value="136"> 136-CONFEDERAÇÃO NACIONAL DAS COOPERATIVAS CENTRAIS UNICRED LTDA. - UNICRED
+                            DO BRASI
+                        </option>
+                        <option value="060"> 060-Confidence Corretora de Câmbio S.A.</option>
+                        <option value="085"> 085-Cooperativa Central de Crédito - AILOS</option>
+                        <option value="097"> 097-Cooperativa Central de Crédito Noroeste Brasileiro Ltda.</option>
+                        <option value="279"> 279-COOPERATIVA DE CREDITO RURAL DE PRIMAVERA DO LESTE</option>
+                        <option value="016"> 016-COOPERATIVA DE CRÉDITO MÚTUO DOS DESPACHANTES DE TRÂNSITO DE SANTA
+                            CATARINA E RI
+                        </option>
+                        <option value="281"> 281-Cooperativa de Crédito Rural Coopavel</option>
+                        <option value="322"> 322-Cooperativa de Crédito Rural de Abelardo Luz - Sulcredi/Crediluz
+                        </option>
+                        <option value="286"> 286-COOPERATIVA DE CRÉDITO RURAL DE OURO SULCREDI/OURO</option>
+                        <option value="273"> 273-Cooperativa de Crédito Rural de São Miguel do Oeste - Sulcredi/São
+                            Miguel
+                        </option>
+                        <option value="098"> 098-Credialiança Cooperativa de Crédito Rural</option>
+                        <option value="010"> 010-CREDICOAMO CREDITO RURAL COOPERATIVA</option>
+                        <option value="089"> 089-CREDISAN COOPERATIVA DE CRÉDITO</option>
+                        <option value="011"> 011-CREDIT SUISSE HEDGING-GRIFFO CORRETORA DE VALORES S.A</option>
+                        <option value="342"> 342-Creditas Sociedade de Crédito Direto S.A.</option>
+                        <option value="321"> 321-CREFAZ SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E A EMPRESA DE PEQUENO
+                            PORTE LT
+                        </option>
+                        <option value="289"> 289-DECYSEO CORRETORA DE CAMBIO LTDA.</option>
+                        <option value="487"> 487-Deutsche Bank S.A. - Banco Alemão</option>
+                        <option value="140"> 140-Easynvest - Título Corretora de Valores SA</option>
+                        <option value="149"> 149-Facta Financeira S.A. - Crédito Financiamento e Investimento</option>
+                        <option value="196"> 196-FAIR CORRETORA DE CAMBIO S.A.</option>
+                        <option value="343"> 343-FFA SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À EMPRESA DE PEQUENO
+                            PORTE LTDA.
+                        </option>
+                        <option value="331"> 331-Fram Capital Distribuidora de Títulos e Valores Mobiliários S.A.
+                        </option>
+                        <option value="285"> 285-Frente Corretora de Câmbio Ltda.</option>
+                        <option value="278"> 278-Genial Investimentos Corretora de Valores Mobiliários S.A.</option>
+                        <option value="364"> 364-GERENCIANET PAGAMENTOS DO BRASIL LTDA</option>
+                        <option value="138"> 138-Get Money Corretora de Câmbio S.A.</option>
+                        <option value="064"> 064-Goldman Sachs do Brasil Banco Múltiplo S.A.</option>
+                        <option value="177"> 177-Guide Investimentos S.A. Corretora de Valores</option>
+                        <option value="146"> 146-GUITTA CORRETORA DE CAMBIO LTDA.</option>
+                        <option value="078"> 078-Haitong Banco de Investimento do Brasil S.A.</option>
+                        <option value="062"> 062-Hipercard Banco Múltiplo S.A.</option>
+                        <option value="189"> 189-HS FINANCEIRA S/A CREDITO, FINANCIAMENTO E INVESTIMENTOS</option>
+                        <option value="269"> 269-HSBC Brasil S.A. - Banco de Investimento</option>
+                        <option value="271"> 271-IB Corretora de Câmbio, Títulos e Valores Mobiliários S.A.</option>
+                        <option value="157"> 157-ICAP do Brasil Corretora de Títulos e Valores Mobiliários Ltda.
+                        </option>
+                        <option value="132"> 132-ICBC do Brasil Banco Múltiplo S.A.</option>
+                        <option value="492"> 492-ING Bank N.V.</option>
+                        <option value="139"> 139-Intesa Sanpaolo Brasil S.A. - Banco Múltiplo</option>
+                        <option value="652"> 652-Itaú Unibanco Holding S.A.</option>
+                        <option value="341"> 341-Itaú Unibanco S.A.</option>
+                        <option value="488"> 488-JPMorgan Chase Bank</option>
+                        <option value="399"> 399-Kirton Bank S.A. - Banco Múltiplo</option>
+                        <option value="293"> 293-Lastro RDV Distribuidora de Títulos e Valores Mobiliários Ltda.
+                        </option>
+                        <option value="105"> 105-Lecca Crédito, Financiamento e Investimento S/A</option>
+                        <option value="145"> 145-LEVYCAM - CORRETORA DE CAMBIO E VALORES LTDA.</option>
+                        <option value="113"> 113-Magliano S.A. Corretora de Cambio e Valores Mobiliarios</option>
+                        <option value="323"> 323-MERCADOPAGO.COM REPRESENTACOES LTDA.</option>
+                        <option value="274"> 274-MONEY PLUS SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E A EMPRESA DE
+                            PEQUENO PORT
+                        </option>
+                        <option value="259"> 259-MONEYCORP BANCO DE CÂMBIO S.A.</option>
+                        <option value="128"> 128-MS Bank S.A. Banco de Câmbio</option>
+                        <option value="354"> 354-NECTON INVESTIMENTOS S.A. CORRETORA DE VALORES MOBILIÁRIOS E
+                            COMMODITIES
+                        </option>
+                        <option value="191"> 191-Nova Futura Corretora de Títulos e Valores Mobiliários Ltda.</option>
+                        <option value="753"> 753-Novo Banco Continental S.A. - Banco Múltiplo</option>
+                        <option value="260"> 260-Nu Pagamentos S.A.</option>
+                        <option value="111"> 111-OLIVEIRA TRUST DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIARIOS S.A.
+                        </option>
+                        <option value="319"> 319-OM DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA</option>
+                        <option value="613"> 613-Omni Banco S.A.</option>
+                        <option value="290"> 290-Pagseguro Internet S.A.</option>
+                        <option value="254"> 254-Paraná Banco S.A.</option>
+                        <option value="326"> 326-PARATI - CREDITO, FINANCIAMENTO E INVESTIMENTO S.A.</option>
+                        <option value="194"> 194-PARMETAL DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA</option>
+                        <option value="174"> 174-PERNAMBUCANAS FINANCIADORA S.A. - CRÉDITO, FINANCIAMENTO E
+                            INVESTIMENTO
+                        </option>
+                        <option value="315"> 315-PI Distribuidora de Títulos e Valores Mobiliários S.A.</option>
+                        <option value="100"> 100-Planner Corretora de Valores S.A.</option>
+                        <option value="125"> 125-Plural S.A. - Banco Múltiplo</option>
+                        <option value="108"> 108-PORTOCRED S.A. - CREDITO, FINANCIAMENTO E INVESTIMENTO</option>
+                        <option value="306"> 306-PORTOPAR DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.</option>
+                        <option value="093"> 093-PÓLOCRED SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À EMPRESA DE
+                            PEQUENO PORT
+                        </option>
+                        <option value="329"> 329-QI Sociedade de Crédito Direto S.A.</option>
+                        <option value="283"> 283-RB CAPITAL INVESTIMENTOS DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS
+                            LIMITADA
+                        </option>
+                        <option value="101"> 101-RENASCENCA DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA</option>
+                        <option value="270"> 270-Sagitur Corretora de Câmbio Ltda.</option>
+                        <option value="751"> 751-Scotiabank Brasil S.A. Banco Múltiplo</option>
+                        <option value="276"> 276-Senff S.A. - Crédito, Financiamento e Investimento</option>
+                        <option value="545"> 545-SENSO CORRETORA DE CAMBIO E VALORES MOBILIARIOS S.A</option>
+                        <option value="190"> 190-SERVICOOP - COOPERATIVA DE CRÉDITO DOS SERVIDORES PÚBLICOS ESTADUAIS DO
+                            RIO GRAN
+                        </option>
+                        <option value="183"> 183-SOCRED S.A. - SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À EMPRESA DE
+                            PEQUENO P
+                        </option>
+                        <option value="365"> 365-SOLIDUS S.A. CORRETORA DE CAMBIO E VALORES MOBILIARIOS</option>
+                        <option value="299"> 299-SOROCRED CRÉDITO, FINANCIAMENTO E INVESTIMENTO S.A.</option>
+                        <option value="014"> 014-State Street Brasil S.A. - Banco Comercial</option>
+                        <option value="197"> 197-Stone Pagamentos S.A.</option>
+                        <option value="340"> 340-Super Pagamentos e Administração de Meios Eletrônicos S.A.</option>
+                        <option value="307"> 307-Terra Investimentos Distribuidora de Títulos e Valores Mobiliários
+                            Ltda.
+                        </option>
+                        <option value="352"> 352-TORO CORRETORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA</option>
+                        <option value="095"> 095-Travelex Banco de Câmbio S.A.</option>
+                        <option value="143"> 143-Treviso Corretora de Câmbio S.A.</option>
+                        <option value="131"> 131-TULLETT PREBON BRASIL CORRETORA DE VALORES E CÂMBIO LTDA</option>
+                        <option value="129"> 129-UBS Brasil Banco de Investimento S.A.</option>
+                        <option value="015"> 015-UBS Brasil Corretora de Câmbio, Títulos e Valores Mobiliários S.A.
+                        </option>
+                        <option value="099"> 099-UNIPRIME CENTRAL - CENTRAL INTERESTADUAL DE COOPERATIVAS DE CREDITO
+                            LTDA.
+                        </option>
+                        <option value="084"> 084-Uniprime Norte do Paraná - Coop de Economia e Crédito Mútuo dos
+                            Médicos
+                        </option>
+                        <option value="373"> 373-UP.P SOCIEDADE DE EMPRÉSTIMO ENTRE PESSOAS S.A.</option>
+                        <option value="298"> 298-Vip's Corretora de Câmbio Ltda.</option>
+                        <option value="296"> 296-VISION S.A. CORRETORA DE CAMBIO</option>
+                        <option value="367"> 367-VITREO DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS S.A.</option>
+                        <option value="310"> 310-VORTX DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.</option>
+                        <option value="102"> 102-XP INVESTIMENTOS CORRETORA DE CÂMBIO,TÍTULOS E VALORES MOBILIÁRIOS
+                            S/A
+                        </option>
+                        <option value="325"> 325-Órama Distribuidora de Títulos e Valores Mobiliários S.A.</option>
+                        <option value="355"> 355-ÓTIMO SOCIEDADE DE CRÉDITO DIRETO S.A.</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Agência/Digito</label>
+                    <input type="text" class="form-control" name="banks[0][agency]">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Conta/Digito</label>
+                    <input type="text" class="form-control" name="banks[0][account]">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Observações</label>
+                    <textarea type="text" class="form-control" name="banks[0][observation]" rows="2"></textarea>
+                </div>
+            </div>
+            <br>
+        </fieldset>
+
+        <br>
+        <div class="row">
+            <div class="col-lg-10 text-right">
+                <button type="button" class="btn btn-sm btn-info btn_fieldset_contact">Contato</button>
+            </div>
+        </div>
+        <br>
+        <fieldset class="form-fieldset fieldset_contact">
+            <legend>Contatos</legend>
+            <div class="form-row" id = "contact_type">
+                    <div class="form-group col-md-3">
+                        <label>Tipo</label>
+                        <select name="contacts[0][type]" class="custom-select" id="select_type">
+                            <option value="" disabled="" selected=""> -- Escolha --</option>
+                            <option value="1">E-mail</option>
+                            <option value="2">Telefone</option>
+                            <option value="3">Celular</option>
+                            <option value="4">Celular/WhatsApp</option>
+                            <option value="5">FAX</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Contato</label>
+                        <input id="contact" name="contacts[0][contact]" class="form-control"
+                               placeholder="Telefone ou E-mail">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label> - </label>
+                        <select name="contacts[0][building_type]" class="custom-select">
+                            <option value="1">Pessoal</option>
+                            <option value="2">Profissional</option>
+                        </select>
+                    </div>
+            </div>
+            <div class="form-group col-md-4">
+                <input name="contacts[0][preferential]" type="checkbox">
+                <label>Contato Preferencial</label>
+            </div>
+        </fieldset>
+
+        <br>
+        <div class="row">
+            <div class="col-lg-10 text-right">
+                <button type="button" class="btn btn-sm btn-info btn_fieldset_address">Endereço</button>
+            </div>
+        </div>
+        <fieldset class="form-fieldset fieldset_address">
+            <legend>Endereços</legend>
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>CEP</label>
+                    <input name="address[0][zip]" type="cep" class="form-control input-zip" data-mask="00000-000">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Número</label>
+                    <input name="address[0][number]" type="text" class="form-control">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Complemento</label>
+                    <input name="address[0][complement]" type="text" class="form-control">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Tipo</label>
+                    <select name="address[0][address_type]" class="custom-select">
+                        <option value="" disabled="" selected=""> -- Escolha --</option>
+                        <option value="1">Residencial</option>
+                        <option value="2">Comercial</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Endereço</label>
+                    <input name="address[0][address]" type="text" class="form-control input-address">
+                </div>
+                <div class="form-group col-md-12">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Bairro</label>
+                    <input name="address[0][district]" type="text" class="form-control input-district">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Cidade</label>
+                    <input name="address[0][city]" type="text" class="form-control input-city">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>UF</label>
+                    <input name="address[0][state]" type="text" class="form-control input-state">
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <input name="address[0][preferential]" type="checkbox">
+                <label>Endereço Preferencial</label>
+            </div>
+        </fieldset>
+
+        </br>
+        <div class="row">
+            <div class="col-lg-10 text-right">
+                <button type="button" class="btn btn-sm btn-info btn_fieldset_cards">Cartões</button>
+            </div>
+        </div>
+
+        <fieldset class="form-fieldset fieldset_cards">
+            <legend>Cartões</legend>
+
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label>Nome Titular</label>
+                    <input name="cards[0][title_name]" type="text" class="form-control">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Número</label>
+                    <input name="cards[0][number]" type="text" data-mask="0000 0000 0000 0000" class="form-control">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Data de Vencimento</label>
+                    <input name="cards[0][due_date]" type="text" data-mask="00/0000" class="form-control">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Observações</label>
+                    <textarea type="text" class="form-control" name="cards[0][observation]" rows="2"></textarea>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <br>
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                <button class="btn btn-lg btn-primary">Salvar Cliente</button>
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}
+
+{% block header %}
+    <link href="/template/v1/lib/select2/css/select2.min.css" rel="stylesheet" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block footer %}
+    <script src="/template/v1/lib/jquery-validation/js/jquery.validate.js"></script>
+    <script src="/template/v1/lib/jquery-validation/js/localization/messages_pt_BR.js"></script>
+    <script src="/wt2/js/terminadedigitar.js"></script>
+    <script src="/wt2/js/cep.js"></script>
+    <script src="/wt2/js/cpf.js"></script>
+    <script src="/template/v1/lib/select2/js/select2.full.min.js"></script>
+    <script src="/wt2/js/system.js"></script>
+
+    <script>
+        cpfCnpj();
+
+        $("#form-register").validate();
+
+
+        $('.fieldset_bank').metalClone({
+            btnClone: '.btn_fieldset_bank',
+            btnRemoveClass: 'btn btn-danger btn-sm',
+            confirmMessageText: 'Deseja mesmo apagar?',
+            onComplete: function (e, o, c) {
+                let cc = 0;
+                $('.fieldset_bank').each(function (i) {
+                    cc = eval(cc + 1);
+                })
+                $(c[0]).find(':input').each(function (ee) {
+                    if ($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                })
+            }
+        });
+
+        $('.fieldset_contact').metalClone({
+            btnClone: '.btn_fieldset_contact',
+            btnRemoveClass: 'btn btn-danger btn-sm',
+            confirmMessageText: 'Deseja mesmo apagar?',
+            onComplete: function (e, o, c) {
+                let cc = 0;
+                $('.fieldset_contact').each(function (i) {
+                    cc = eval(cc + 1);
+                })
+                $(c[0]).find(':input').each(function (ee) {
+                    if ($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                })
+            }
+        });
+
+        $('.fieldset_address').metalClone({
+            btnClone: '.btn_fieldset_address',
+            btnRemoveClass: 'btn btn-danger btn-sm',
+            confirmMessageText: 'Deseja mesmo apagar?',
+            onComplete: function (e, o, c) {
+                let cc = 0;
+                $('.fieldset_address').each(function (i) {
+                    cc = eval(cc + 1);
+                })
+                $(c[0]).find(':input').each(function (ee) {
+                    if ($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                })
+            }
+        });
+
+        $('.fieldset_cards').metalClone({
+            btnClone: '.btn_fieldset_cards',
+            btnRemoveClass: 'btn btn-danger btn-sm',
+            confirmMessageText: 'Deseja mesmo apagar?',
+            onComplete: function (e, o, c) {
+                let cc = 0;
+                $('.fieldset_cards').each(function (i) {
+                    cc = eval(cc + 1);
+                })
+                $(c[0]).find(':input').each(function (ee) {
+                    if ($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                })
+            }
+        });
+
+
+        $("#contact_type").on('change', '#select_type', function () {
+            addMaskToInput();
+        });
+
+        function addMaskToInput() {
+            let $select_type = $('#select_type option:selected').val();
+            let $contact = $('#contact');
+            if ($select_type !== '1') {
+                $contact.mask('(00)00000-0000');
+            } else {
+                $contact.unmask();
+            }
+        }
+
+    </script>
+{% endblock %}

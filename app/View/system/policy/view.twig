@@ -1,0 +1,187 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+    <h1 hidden>{{ policy.getProposal.hash }}</h1>
+
+    <form action="{{ url_for('policy.put', {hash_policy: policy.getHash}) }}" method="post" enctype="multipart/form-data">
+
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                        <li class="breadcrumb-item"><a href="#">Apólices</a></li>
+                        <li class="breadcrumb-item"><a href="#">Formulário</a></li>
+                    </ol>
+                </nav>
+                <h4 class="mg-b-0 tx-spacing--1">Formulário da Apólice</h4>
+            </div>
+            <div class="">
+                <button hidden class="btn btn-lg btn-primary">Salvar Apólice</button>
+            </div>
+
+            <div id="edit" class="">
+                <button id="removeDisabled" class="btn btn-lg btn-primary">Editar</button>
+            </div>
+        </div>
+
+        <fieldset class="form-fieldset">
+            <legend>Informações Gerais</legend>
+            <div class="form-row">
+                <div class="form-group form-group-default col-md-8 form-group-default-select2">
+                    <label>Clientes</label>
+                    <input readonly value="{{ policy.getCustomer.getFirstName }}" type="text" class="form-control" name="customer_hash">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Status</label>
+                    <select disabled class="custom-select" name="status">
+                        <option {% if policy.getStatus == 0 %} selected="selected" {% endif %} value=0>
+                            Deletado
+                        </option>
+                        <option {% if policy.getStatus == 1 %} selected="selected" {% endif %} value=1>
+                            Ativo
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Placa do veículo</label>
+                    <input readonly value="{{ policy.getPlate }}" type="text" class="form-control" name="plate">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Chassis</label>
+                    <input readonly value="{{ policy.getChassis  }}" type="text" class="form-control" name="chassis">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Seguradora</label>
+                    <select disabled class="custom-select" required="" name="safe_company">
+                        <option value="" disabled="" selected=""> -- Escolha --</option>
+                        {% for  safe in safeCompanies%}
+                            {% if policy.safeCompany.id == safe.id %}
+                                <option selected value='{{ safe.hash }}'>{{ safe.insurer }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        {% for  safe in safeCompanies%}
+                            <option value='{{safe.hash}}'>{{safe.insurer}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Ramo</label>
+                    <select disabled  class="custom-select"  name="branch" id="ramos">
+                        <option {% if policy.getBranch  == 1 %} selected {% endif %} value='1' selected>Auto</option>
+                        <option {% if policy.getBranch  == 4 %} selected {% endif %} value='4'>Condominio</option>
+                        <option {% if policy.getBranch  == 8 %} selected {% endif %} value='8'>Dental</option>
+                        <option {% if policy.getBranch == 11 %} selected {% endif %} value='11'>Empresarial</option>
+                        <option {% if policy.getBranch == 13 %} selected {% endif %} value='13'>Equipamentos</option>
+                        <option {% if policy.getBranch  == 2 %} selected {% endif %} value='2'>Frota</option>
+                        <option {% if policy.getBranch  == 9 %} selected {% endif %} value='9'>Previdencia</option>
+                        <option {% if policy.getBranch  == 3 %} selected {% endif %} value='3'>Residencia</option>
+                        <option {% if policy.getBranch == 12 %} selected {% endif %} value='12'>Risco de Engenharia</option>
+                        <option {% if policy.getBranch == 14 %} selected {% endif %} value='14'>Riscos Diversos</option>
+                        <option {% if policy.getBranch == 15 %} selected {% endif %} value='15'>Seguro Aluguel</option>
+                        <option {% if policy.getBranch == 10 %} selected {% endif %} value='10'>Transportes</option>
+                        <option {% if policy.getBranch  == 7 %} selected {% endif %} value='7'>Viagem</option>
+                        <option {% if policy.getBranch  == 5 %} selected {% endif %} value='5'>Vida</option>
+                        <option {% if policy.getBranch  == 6 %} selected {% endif %} value='6'>Vida em Grupo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Número da Apólice</label>
+                    <input readonly value="{{ policy.getPolicyNumber  }}" type="text" class="form-control" name="policy_number">
+                </div>
+                <div class="form-group col-md-5">
+                    <label>Vigência</label>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input readonly type="text" class="form-control" name="start" data-mask="00/00/0000"
+                                   value="{{ policy.getProposal.getDueDateStart|date('d/m/Y') }}">
+                        </div>
+                        até
+                        <div class="col-md-5">
+                            <input readonly type="text" class="form-control" name="end" data-mask="00/00/0000"
+                                    {% if policy.getProposal.getDueDateEnd %} value="{{ policy.getProposal.getDueDateEnd|date('d/m/Y') }}" {% else %} value="00/00/0000" {% endif %}>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Observações</label>
+                    <textarea readonly type="text" class="form-control" rows="3" name="observations">{{ policy.getObservation }}</textarea>
+                </div>
+            </div>
+        </fieldset>
+        <br>
+        <div class="file-loading">
+            <input id="kv-explorer" type="file" multiple>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                <button hidden type='submit' class="btn btn-lg btn-primary">Salvar Apólice</button>
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}
+
+{% block header %}
+    <link href="/template/v1/lib/select2/css/select2.min.css" rel="stylesheet" type="text/css"
+          media="screen"/>
+{% endblock %}
+
+{% block footer %}
+    <script src="/template/v1/lib/select2/js/select2.full.min.js"></script>
+    <script src="/wt2/js/editForm.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2-test').select2();
+        });
+
+        const footerTemplate = '<div class="file-thumbnail-footer" style ="height:94px">\n' +
+            '  <input id="{document_id}" class="kv-input kv-new form-control input-sm form-control-sm text-center {TAG_CSS_NEW}" ' +
+            'value="{caption}" name="title[{document_id}]" placeholder="Enter caption...">\n' +
+            '   <div class="small" style="margin:15px 0 2px 0">{size}</div> {progress}\n{indicator}\n{actions}\n' +
+            '</div>';
+
+        $("#kv-explorer").fileinput({
+            initialPreview: {{ preview|raw }},
+            initialPreviewConfig: {{ previewConfig|raw }},
+            layoutTemplates: {footer: footerTemplate},
+            allowedPreviewTypes: ['image', 'pdf', 'video', 'office'],
+            'theme': 'fas',
+            'uploadUrl': "{{ url_for('upload.policy', {hash: policy.hash} ) }}",
+            'deleteUrl': "{{ url_for('file.delete', {type: 'policy'}) }}",
+            previewFileIcon: '<i class="fas fa-file"></i>',
+            previewFileIconSettings: {
+                'docx': '<i class="fas fa-file-word text-primary"></i>'
+            },
+            initialPreviewThumbTags : {{ initialPreviewThumbTags|raw }},
+            language: 'pt-BR',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+        });
+
+        $('.fieldset_doc').metalClone({
+            btnClone 	: '.btn_fieldset_doc',
+            btnRemoveClass: 'btn btn-danger btn-sm',
+            confirmMessageText: 'Deseja mesmo apagar?',
+            onComplete: function (e, o, c) {
+                let cc = 0;
+                $('.fieldset_doc').each(function (i) { cc = eval(cc + 1); })
+                $(c[0]).find(':input').each(function (ee) {
+                    if($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                })
+            }
+        });
+    </script>
+{% endblock %}

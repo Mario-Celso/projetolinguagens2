@@ -1,0 +1,69 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                    <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                    <li class="breadcrumb-item"><a href="#">Clientes</a></li>
+                    <li class="breadcrumb-item"><a href="#">Listagem Geral</a></li>
+                </ol>
+            </nav>
+            <h4 class="mg-b-0 tx-spacing--1">Lista de Sinistros</h4>
+        </div>
+        <div class="">
+            <a href="{{ url_for('claim.form')}}" type="button" class="btn btn-lg btn-primary">Cadastrar Novo Sinistro</a>
+        </div>
+    </div>
+
+    <div data-label="Example" class="df-example demo-table">
+        <table id="list" class="table table-hover">
+            <thead>
+            <tr>
+                <th class="wd-20p">Cliente</th>
+                <th class="wd-15p">CPF/CNPJ</th>
+                <th class="wd-15p">Apólice</th>
+                <th class="wd-15p">Aberto em</th>
+                <th class="wd-15p">Status</th>
+                <th class="wd-15p">Ações</th>
+            </tr>
+            </thead>
+        </table>
+    </div><!-- df-example -->
+
+{% endblock %}
+
+
+{% block footer %}
+    <script src="/template/v1/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/template/v1/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+        let table = $('#list').DataTable({
+            ajax: "{{ url_for('claim.search')}}",
+            columns: [
+                { "data": "Cliente" },
+                { "data": "CPF/CNPJ" },
+                { "data": "Apólice" },
+                { "data": "Aberto_em" },
+                { "data": "Status" },
+                { "defaultContent": "<button class='btn btn-sm btn-primary'>Visualizar</button>"}
+            ],
+            language: {
+                url: '/template/v1/assets/data/pt_BT.json'
+            }
+        });
+            $('#list tbody').on( 'click', 'button', function () {
+                let data = table.row($(this).parents('tr')).data();
+                window.location.href = '/system/insurance_claim/view/' + data['DT_RowId']
+            } );
+        } );
+    </script>
+{% endblock %}

@@ -1,0 +1,12 @@
+<phpunit bootstrap="config.php">
+    <testsuites>
+        <testsuite name="entity">
+            <!--file>Entity/name.php</file-->
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../app</directory>
+        </whitelist>
+    </filter>
+</phpunit>

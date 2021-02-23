@@ -1,0 +1,38 @@
+{% extends "/template/administrator/template.twig" %}
+
+{% block content %}
+
+    {% include '/template/flash_message.twig' %}
+    <div style="display: flex; justify-content: flex-end ">
+        <a href="{{ url_for('manager.administrator.form') }}" type="button" class="btn btn-primary">+ Cadastrar Administrador</a>
+    </div>
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h2 class="h4">Lista de Administradores</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for adm in administrators %}
+                    <tr>
+                        <td>{{ adm.user }}</td>
+                        <td>{{ adm.name }}</td>
+                        <td>{{ adm.email }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary"
+                               href="{{ url_for('manager.administrator.get', {'hash_adm' : adm.hash}) }}" role="button">Abrir</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}

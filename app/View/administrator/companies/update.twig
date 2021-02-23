@@ -1,0 +1,66 @@
+{% extends "/template/administrator/template.twig" %}
+
+{% block content %}
+
+    {% include '/template/flash_message.twig' %}
+    <div>
+        <h4 class="mg-b-0 tx-spacing--1"> Formulário da Empresa</h4>
+    </div>
+    <form action="{{ url_for('manager.companies.update', {'hash_company' : company.hash}) }}" method="post"
+          enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>Nome</label>
+                <input value="{{ company.name }}" type="text" class="form-control" name="name">
+            </div>
+            <div class="form-group col-md-4">
+                <label>Documento</label>
+                <input value="{{ company.document }}" type="text" class="form-control" name="document">
+            </div>
+            <div class="form-group col-md-4">
+                <label>Status</label>
+                <select class="custom-select select2-test" required="" name="status">
+                    <option value="1">Ativado</option>
+                    <option value="0">Desativado</option>
+                </select>
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <div style="text-align: right;">
+            <a href="{{ url_for('manager.user.form') }}" type="button" class="btn btn-primary">+ Cadastrar Usuário</a>
+        </div>
+        <h2 class="h4">Lista dos Usuários</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email}}</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary"
+                               href="{{ url_for('manager.user.get', {'hash_user' : user.hash}) }}" role="button">Abrir</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}

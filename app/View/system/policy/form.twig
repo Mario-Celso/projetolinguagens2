@@ -1,0 +1,127 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <form id="form-register" action="/system/proposal/insurance_policy/register" method="post" enctype="multipart/form-data">
+
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                        <li class="breadcrumb-item"><a href="#">Apólices</a></li>
+                        <li class="breadcrumb-item"><a href="#">Formulário</a></li>
+                    </ol>
+                </nav>
+                <h4 class="mg-b-0 tx-spacing--1">Formulário da Apólice</h4>
+            </div>
+            <div class="">
+                <button class="btn btn-lg btn-primary">Salvar Apólice</button>
+            </div>
+        </div>
+
+        <fieldset class="form-fieldset">
+            <legend>Informações Gerais</legend>
+            <div class="form-row">
+                <div class="form-group required form-group-default col-md-12 form-group-default-select2">
+                    <label>Clientes</label>
+                    <select class="custom-select select2-test" required="" name="proposal_hash">
+                        <option value="" disabled="" selected=""> Cliente (CPF/CNPJ) - Proposta</option>
+                        {% for proposal in proposals %}
+                            <option value="{{ proposal.hash }}">
+                                {{ proposal.customer.firstName }} {{ proposal.customer.lastName }}
+                                 (CPF/CNPJ {{ proposal.customer.document }}) - #n{{ proposal.getId }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Placa do veículo</label>
+                    <input type="text" class="form-control" name="plate">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Chassis</label>
+                    <input type="text" class="form-control" name="chassis">
+                </div>
+                <div class="form-group required col-md-3">
+                    <label>Seguradora</label>
+                    <select class="custom-select" required="" name="safe_company">
+                        <option value="" disabled="" selected=""> -- Escolha --</option>
+                        {% for safe in safeCompanies%}
+                            <option value='{{safe.hash}}'>{{safe.insurer}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group required col-md-3">
+                    <label>Ramo</label>
+                    <select class="custom-select" required  name="branch" id="ramos">
+                        <option value="Selecione">Selecione</option>
+                        <option value='1' selected>Auto</option>
+                        <option value='4'>Condominio</option>
+                        <option value='8'>Dental</option>
+                        <option value='11'>Empresarial</option>
+                        <option value='13'>Equipamentos</option>
+                        <option value='2'>Frota</option>
+                        <option value='9'>Previdencia</option>
+                        <option value='3'>Residencia</option>
+                        <option value='12'>Risco de Engenharia</option>
+                        <option value='14'>Riscos Diversos</option>
+                        <option value='15'>Seguro Aluguel</option>
+                        <option value='10'>Transportes</option>
+                        <option value='7'>Viagem</option>
+                        <option value='5'>Vida</option>
+                        <option value='6'>Vida em Grupo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Número da Apólice</label>
+                    <input type="text" class="form-control" name="policy_number">
+                </div>
+{#                <div class="form-group required col-md-3">#}
+{#                    <label>Vencimento</label>#}
+{#                    <input type="text" class="form-control" required data-mask="00/00/0000" name="policy_date">#}
+{#                </div>#}
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Observações</label>
+                    <textarea type="text" class="form-control" rows="3" name="observations"></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <br>
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                <button class="btn btn-lg btn-primary">Salvar Apólice</button>
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}
+
+{% block header %}
+    <link href="/template/v1/lib/select2/css/select2.min.css" rel="stylesheet" type="text/css"
+          media="screen"/>
+{% endblock %}
+
+{% block footer %}
+    <script src="/template/v1/lib/select2/js/select2.full.min.js"></script>
+    <script>
+        $("#form-register").validate();
+
+        $(document).ready(function() {
+            $('.select2-test').select2();
+        });
+    </script>
+{% endblock %}

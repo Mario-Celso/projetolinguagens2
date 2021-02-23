@@ -1,0 +1,36 @@
+{% extends "/template/administrator/template.twig" %}
+
+{% block content %}
+
+    {% include '/template/flash_message.twig' %}
+
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h2 class="h4">Lista de Usuários</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Empresa</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email}}</td>
+                        <td>{{ user.company.name }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary"
+                               href="{{ url_for('manager.user.get', {'hash_user' : user.hash}) }}" role="button">Abrir</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}

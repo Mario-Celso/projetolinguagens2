@@ -1,0 +1,488 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                    <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                    <li class="breadcrumb-item"><a href="#">Cliente</a></li>
+                    <li class="breadcrumb-item"><a href="#">Detalhes</a></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#details" role="tab" aria-controls="home"
+               aria-selected="true">Detalhes do Cadastro</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#proposals" role="tab" aria-controls="profile"
+               aria-selected="false">Propostas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#policies" role="tab" aria-controls="contact"
+               aria-selected="false">Apólices</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#claims" role="tab" aria-controls="contact"
+               aria-selected="false">Sinistros</a>
+        </li>
+    </ul>
+    <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent">
+        <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="home-tab">
+            <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                <div>
+                    <h4 class="mg-b-0 tx-spacing--1">Dados Pessoais</h4>
+                </div>
+                <div class="">
+                    <a class="btn btn-sm btn-primary"
+                       href="{{ url_for('customer.get', {'hash' : customer.hash}) }}">
+                        Editar Cliente </a>
+                </div>
+            </div>
+            <fieldset class="form-fieldset">
+                <legend>Informações Gerais</legend>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Nome/Razão Social</label>
+                        <p class="form-control">{{ customer.getFirstName }}</p>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Sobrenome/Nome Fantasia</label>
+                        <p class="form-control">{{ customer.getLastName }}</p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>CPF/CNPJ</label>
+                        <p class="form-control">{{ customer.getDocument }}</p>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Data Aniversário</label>
+                        <p class="form-control">{{ customer.getBirthday|date("d/m/Y") }}</p>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Sexo</label>
+                            <p class="form-control">
+                                {% if customer.getGender == 'F' %}Feminino{% endif %}
+                                {% if customer.getGender == 'M' %}Masculino{% endif %}
+                            </p>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Estado Civil</label>
+                        <p class="form-control">
+                            {% if customer.getCivilStatus == 1 %} Solteiro {% endif %}
+                            {% if customer.getCivilStatus == 2 %} Casado {% endif %}
+                            {% if customer.getCivilStatus == 3 %} Separado {% endif %}
+                            {% if customer.getCivilStatus == 4 %} Divorciado {% endif %}
+                            {% if customer.getCivilStatus == 5 %} Viúvo {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>CNH</label>
+                        <p class="form-control">{{ customer.getDocumentCnh }}</p>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Primeira Habilitação</label>
+                        <p class="form-control">{{ customer.getFirstCnhDate|date("d/m/Y") }}</p>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Data Emissão</label>
+                        <p class="form-control">{{ customer.getEmissionCnhDate|date("d/m/Y") }}</p>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Data Vencimento</label>
+                        <p class="form-control">{{ customer.getCnhDueDate|date("d/m/Y") }}</p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Profissão</label>
+                        <p class="form-control">{{ customer.getProfession }}</p>
+                    </div>
+                    <div class="form-group col-md-6">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Observações</label>
+                        <textarea type="text" class="form-control" rows="3" name="observation">{{customer.getObservation}}</textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <br>
+            <fieldset class="form-fieldset">
+                <legend>Bancos</legend>
+                {% for b in customer.getBanks %}
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Agência</label>
+                            <p class="form-control">{{ b.agency }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Conta</label>
+                            <p class="form-control">{{ b.account }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Banco</label>
+                            <p class="form-control">{{ b.bank }}</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Observações</label>
+                            <p class="form-control">{{ b.getObservation }}</p>
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+                {% endfor %}
+            </fieldset>
+
+            <br>
+            <fieldset class="form-fieldset">
+                <legend>Contatos</legend>
+                {% for c in customer.getContacts %}
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Email</label>
+                            <p class="form-control">{{ c.email }}</p>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Tipo de email</label>
+                            <p class="form-control">
+                                {% if c.getEmailType == 1 %}Pessoal{% endif %}
+                                {% if c.getEmailType == 2 %}Comercial{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Telefone</label>
+                            <p class="form-control">{{ c.phone }}</p>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Tipo de telefone</label>
+                            <p class="form-control">
+                                {% if c.getphoneType == 1 %} Casa {% endif %}
+                                {% if c.getphoneType == 2 %} Comercial {% endif %}
+                                {% if c.getphoneType == 3 %} Celular {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group custom-checkbox custom-control pl-4 col-md-2">
+                            <input id="preferredEmail{{ c.hash }}" {% if c.getPreferredEmail %} checked {% endif %} name="contacts[{{ c.getHash }}][preferred_email]" type="checkbox" class="custom-control-input" disabled>
+                            <label for="preferredEmail{{ c.hash }}" class="custom-control-label" data-value="1">Email Preferido</label>
+                        </div>
+                        <div class="form-group custom-checkbox custom-control col-md-2">
+                            <input {% if c.getPreferredPhone %} checked {% endif %} id="preferredPhone{{ c.hash }}" name="contacts[{{ c.getHash }}][preferred_phone]" type="checkbox" class="custom-control-input" disabled>
+                            <label class="custom-control-label" data-value="1" for="preferredPhone{{ c.hash }}">Telefone Preferido</label>
+                        </div>
+                        <div class="form-group custom-checkbox custom-control col-md-2">
+                            <input {% if c.whatsapp == 2 %} checked {% endif %} id="whatsapp{{ c.hash }}" name="contacts[{{ c.getHash }}][whatsapp]" type="checkbox" class="custom-control-input" disabled>
+                            <label class="custom-control-label" data-value="1" for="whatsapp{{ c.hash }}">Whatsapp</label>
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+                {% endfor %}
+            </fieldset>
+
+            <br>
+            <fieldset class="form-fieldset">
+                <legend>Endereços</legend>
+                {% for a in customer.getAddress %}
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="inputEmail4">Tipo</label>
+                            <p class="form-control">
+                                {% if a.getAddressType == 1 %} Residencial {% endif %}
+                                {% if a.getAddressType == 2 %} Comercial {% endif %}
+                            </p>'
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">CEP</label>
+                            <p class="form-control">{{ a.getZip }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Número</label>
+                            <p class="form-control">{{ a.getNumber }}</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label for="inputEmail4">Endereço</label>
+                            <p class="form-control">{{ a.getAddress }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Complemento</label>
+                            <p class="form-control">{{ a.getComplement }}</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="inputEmail4">Bairro</label>
+                            <p class="form-control">{{ a.getDistrict }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Cidade</label>
+                            <p class="form-control">{{ a.getCity }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">UF</label>
+                            <p class="form-control">{{ a.getState }}</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group custom-checkbox custom-control pl-4 col-md-2">
+                            <input {% if a.getPreferredAddress %} checked {% endif %} id="preferredAddress{{ a.getHash }}" name="address[{{ a.getHash }}][preferred_address]" type="checkbox" class="custom-control-input" disabled>
+                            <label for="preferredAddress{{ a.getHash }}" class="custom-control-label" data-value="1" for="inputEmail4 ">Endereço Preferido</label>
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+                {% endfor %}
+            </fieldset>
+            <fieldset class="form-fieldset">
+                <legend>Endereços</legend>
+                {% for a in customer.getAddress %}
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="inputEmail4">Tipo</label>
+                            <p class="form-control">
+                                {% if a.getAddressType == 1 %} Residencial {% endif %}
+                                {% if a.getAddressType == 2 %} Comercial {% endif %}
+                            </p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">CEP</label>
+                            <p class="form-control">{{ a.getZip }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Número</label>
+                            <p class="form-control">{{ a.getNumber }}</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label for="inputEmail4">Endereço</label>
+                            <p class="form-control">{{ a.getAddress }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Complemento</label>
+                            <p class="form-control">{{ a.getComplement }}</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="inputEmail4">Bairro</label>
+                            <p class="form-control">{{ a.getDistrict }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Cidade</label>
+                            <p class="form-control">{{ a.getCity }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">UF</label>
+                            <p class="form-control">{{ a.getState }}</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group custom-checkbox custom-control pl-4 col-md-2">
+                            <input {% if a.getPreferredAddress %} checked {% endif %} id="preferredAddress{{ a.getHash }}" name="address[{{ a.getHash }}][preferred_address]" type="checkbox" class="custom-control-input" disabled>
+                            <label for="preferredAddress{{ a.getHash }}" class="custom-control-label" data-value="1" for="inputEmail4 ">Endereço Preferido</label>
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+                {% endfor %}
+            </fieldset>
+            <br>
+            <fieldset class="form-fieldset">
+                <legend>Documentos</legend>
+            </fieldset>
+
+            <br>
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <a class="btn btn-sm btn-primary"
+                       href="{{ url_for('customer.get', {'hash' : customer.hash}) }}">
+                        Editar Cliente </a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="proposals" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                <div>
+                    <h4 class="mg-b-0 tx-spacing--1">Lista de Propostas</h4>
+                </div>
+                <div class="">
+                    <a href="{{ url_for('proposal.form', {'hash_customer' : customer.hash}) }}" type="button"
+                       class="btn btn-lg btn-primary">Cadastrar Uma Nova
+                        Proposta</a>
+                </div>
+            </div>
+            <div data-label="Example" class="df-example demo-table">
+                <table id="list" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="wd-15p">Placa</th>
+                        <th class="wd-15p">Chassi</th>
+                        <th class="wd-15p">Apólice</th>
+                        <th class="wd-20p">Seguradora</th>
+                        <th class="wd-15p">Data Cadastro</th>
+                        <th>Zero KM</th>
+
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in customer.proposals %}
+                        <tr>
+                            <td scope="row">{{ p.plate }}</td>
+                            <td scope="row">{{ p.chassis }}</td>
+                            <td scope="row">{{ p.policyNumber }}</td>
+                            <td scope="row">{{p.safeCompany.insurer }}</td>
+                            <td scope="row">{{ p.createdAt|date("d/m/Y") }}</td>
+                            <td scope="row">{{ p.vehicleState == 0 ? "Novo" : "Usado" }}</td>
+
+                            <td scope="row"><a class="btn btn-sm btn-primary"
+                                               href="{{ url_for('proposal.get', {'hash_proposal' : p.hash}) }}">
+                                    Visualizar </a></td>
+
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="7" class="valign-middle-f"> Nenhum registro encontrado</td>
+                            <td></td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="policies" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                <div>
+                    <h4 class="mg-b-0 tx-spacing--1">Lista de Apólices</h4>
+                </div>
+                <div class="">
+                    <a href="{{ url_for('proposal.form', {'hash_customer' : customer.hash}) }}" type="button"
+                       class="btn btn-lg btn-primary">Cadastrar Uma Nova
+                        Apólice</a>
+                </div>
+            </div>
+            <div data-label="Example" class="df-example demo-table">
+                <table id="list" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="wd-15p">Placa</th>
+                        <th class="wd-15p">Chassi</th>
+                        <th class="wd-15p">Apólice</th>
+                        <th class="wd-20p">Seguradora</th>
+                        <th class="wd-15p">Data Cadastro</th>
+                        <th></th>
+
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in customer.policies %}
+                        <tr>
+                            <td scope="row">{{ p.plate }}</td>
+                            <td scope="row">{{ p.chassis }}</td>
+                            <td scope="row">{{ p.policyNumber }}</td>
+                            <td scope="row">{{ p.safeCompany.insurer }}</td>
+                            <td scope="row">{{ p.createdAt|date("d/m/Y") }}</td>
+                            <td></td>
+
+                            <td scope="row"><a class="btn btn-sm btn-primary"
+                                               href="#"> Visualizar </a>
+                            </td>
+
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="7" class="valign-middle-f"> Nenhum registro encontrado</td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="claims" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                <div>
+                    <h4 class="mg-b-0 tx-spacing--1">Lista de Sinistros</h4>
+                </div>
+                <div class="">
+                    <a href="{{ url_for('proposal.form', {'hash_customer' : customer.hash}) }}" type="button"
+                       class="btn btn-lg btn-primary">Cadastrar Um Novo
+                        Sinistro</a>
+                </div>
+            </div>
+            <div data-label="Example" class="df-example demo-table">
+                <table id="list" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="wd-15p">Código</th>
+                        <th class="wd-15p">Apólice</th>
+                        <th class="wd-20p">Vencimento</th>
+                        <th class="wd-15p">Data Cadastro</th>
+                        <th class="wd-15p">Atualizada Em</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for c in customer.insuranceClaims %}
+                        <tr>
+                            <td scope="row">{{ c.id }}</td>
+                            <td scope="row">{{ c.policy.policyNumber }}</td>
+                            <td scope="row">{{ c.policy.policyDate|date("d/m/Y") }}</td>
+                            <td scope="row">{{ c.createdAt|date("d/m/Y") }}</td>
+                            <td scope="row">{{ c.updatedAt|date("d/m/Y") }}</td>
+                            <td scope="row"><a class="btn btn-sm btn-primary"
+                                               href="{{ url_for('claim.get', {'hash_claim' : c.hash}) }}"> Visualizar </a>
+                            <td></td>
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="7" class="valign-middle-f"> Nenhum registro encontrado</td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block header %}
+
+
+{% endblock %}

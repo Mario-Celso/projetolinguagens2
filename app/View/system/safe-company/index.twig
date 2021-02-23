@@ -1,0 +1,49 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                    <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                    <li class="breadcrumb-item"><a href="#">Cia Seguros</a></li>
+                    <li class="breadcrumb-item"><a href="#">Listagem Geral</a></li>
+                </ol>
+            </nav>
+            <h4 class="mg-b-0 tx-spacing--1">Lista de Cia Seguros</h4>
+        </div>
+        <div class="">
+            <a href="{{ url_for('safe-company.form')}}" type="button" class="btn btn-lg btn-primary">Cadastrar Cia Seguro</a>
+        </div>
+    </div>
+    <br>
+    <div data-label="Example" class="df-example demo-table">
+        <table id="list" class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th class="wd-10p">Id</th>
+                <th class="wd-15p">Seguradora</th>
+                <th class="wd-15p"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for safe in safeCompanies %}
+                <tr>
+                    <td>{{ safe.id }}</td>
+                    <td>{{ safe.insurer }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('safe-company.get', {'hash_safe_company' : safe.hash}) }}" role="button">Abrir</a>
+                    </td>
+                </tr>
+            {% else %}
+                <td colspan="4" class="text-center text-danger">Não há seguradora cadastrada</td>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

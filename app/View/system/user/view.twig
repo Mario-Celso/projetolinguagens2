@@ -1,0 +1,30 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Perfil{% endblock %}
+
+
+{% block content %}
+    <div class="form-group col-md-12 form-group-default-select2">
+        <h3>{{ company.name }}</h3>
+    </div>
+
+    <form action="{{ url_for("user.put", {'hash' : session.hash}) }}" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="form-group col-md-5 form-group-default-select2">
+                <label>Nome</label>
+                <input type="text" class="form-control" name="name" id="name" value="{{ user.name }}">
+            </div>
+            <div class="form-group col-md-5 form-group-default-select2">
+                <label>E-mail</label>
+                <input type="text" class="form-control" name="email" id="email" value="{{ user.email }}">
+            </div>
+        </div>
+
+        <div class="form-group col-md-1 form-group-default-select2">
+            <button type="submit" class="btn btn-lg btn-primary">Salvar</button>
+        </div>
+
+
+    </form>
+
+{% endblock %}

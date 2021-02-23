@@ -1,0 +1,38 @@
+{% extends "/template/administrator/template.twig" %}
+
+{% block content %}
+
+    {% include '/template/flash_message.twig' %}
+    <div style="display: flex; justify-content: flex-end ">
+        <a href="{{ url_for('manager.companies.record') }}" type="button" class="btn btn-primary">+ Cadastrar Empresa</a>
+    </div>
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h2 class="h4">Lista de Empresas</h2>
+        <div class="table-responsive">
+            <table class="table table-striped" style="font-size: 14px;">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Documento</th>
+                        <th>Data do Cadastro</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                    <tr>
+                        <td>{{ company.name }}</td>
+                        <td>{{ company.document }}</td>
+                        <td>{{ company.createdAt|date('d/m/Y') }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary"
+                               href="{{ url_for('manager.companies.get', {'hash_company' : company.hash}) }}" role="button">Abrir</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}

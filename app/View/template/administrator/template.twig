@@ -1,0 +1,70 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> ~ </title>
+    <link href="https://getbootstrap.com/docs/4.5/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <meta name="theme-color" content="#563d7c">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/4.5/examples/offcanvas/offcanvas.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand mr-auto mr-lg-0" href="#"> CAPUTO - ADM</a>
+    <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+</nav>
+
+<div class="nav-scroller bg-white shadow-sm ">
+    <nav class="nav nav-underline">
+        <a class="nav-link active" href="{{ url_for('manager.index') }}">Dashboard</a>
+        <a class="nav-link" href="{{ url_for('manager.companies') }}">Empresas</a>
+        <a class="nav-link" href="{{ url_for('manager.administrator.index') }}">Administradores</a>
+        <a class="nav-link" href="{{ url_for('manager.out') }}">Sair</a>
+    </nav>
+</div>
+
+<main role="main" class="container">
+
+
+    <br><br>
+    {% include '/template/flash_message.twig' %}
+
+    {% block content %}{% endblock %}
+
+</main>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+<script src="https://getbootstrap.com/docs/4.5/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        'use strict'
+        $('[data-toggle="offcanvas"]').on('click', function () {
+            $('.offcanvas-collapse').toggleClass('open')
+        })
+    })
+</script>
+{% block footer %}{% endblock %}
+</body>
+</html>

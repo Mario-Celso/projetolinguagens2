@@ -1,0 +1,8 @@
+/data/cache/proxies/*
+/vendor/
+/.idea/
+/logs/*
+!/logs/README.md
+composer.lock
+config.dev.ini
+config.ini

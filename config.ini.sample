@@ -1,0 +1,13 @@
+url = -
+
+db-host =
+db-database =
+db-user =
+db-pass =
+
+email-from =
+email-address =
+email-password =
+email-smtp =
+email-port =
+email-tls =

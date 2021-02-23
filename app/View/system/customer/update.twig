@@ -1,0 +1,2337 @@
+{% extends "/template/template.twig" %}
+
+{% block title %} - Dashboard{% endblock %}
+
+
+{% block content %}
+
+    <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#details" role="tab" aria-controls="home"
+               aria-selected="true">Detalhes do Cadastro</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#proposals" role="tab" aria-controls="profile"
+               aria-selected="false">Propostas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#policies" role="tab" aria-controls="contact"
+               aria-selected="false">Apólices</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#claims" role="tab" aria-controls="contact"
+               aria-selected="false">Sinistros</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent">
+        <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="home-tab">
+            <form id="form-update" action="/system/customer/{{ customer.hash }}" method="post"
+                  enctype="multipart/form-data">
+
+                <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                                <li class="breadcrumb-item"><a href="#">CAPUTO</a></li>
+                                <li class="breadcrumb-item"><a href="#">Clientes</a></li>
+                                <li class="breadcrumb-item"><a href="#">Formulário</a></li>
+                            </ol>
+                        </nav>
+                        <h4 class="mg-b-0 tx-spacing--1"> Formulário do Cliente</h4>
+                    </div>
+                    <div class="">
+                        <button hidden class="btn btn-lg btn-primary">Salvar Cliente</button>
+                    </div>
+
+                    <div id="edit" class="">
+                        <button id="removeDisabled" class="btn btn-lg btn-primary">Editar</button>
+                    </div>
+                </div>
+
+                <fieldset class="form-fieldset">
+                    <legend>Informações Gerais</legend>
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            <label>Nome/Razão Social</label>
+                            <input readonly value="{{ customer.getFirstName }}" type="text" class="form-control"
+                                   name="first_name">
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Sobrenome/Nome Fantasia</label>
+                            <input readonly value="{{ customer.getLastName }}" type="text" class="form-control"
+                                   name="last_name">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Status</label>
+                            <select disabled class="custom-select" name="status">
+                                <option {% if customer.getStatus == 0 %} selected="selected" {% endif %} value=0>
+                                    Deletado
+                                </option>
+                                <option {% if customer.getStatus == 1 %} selected="selected" {% endif %} value=1>
+                                    Ativo
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>CPF/CNPJ</label>
+                            <input readonly value="{{ customer.getDocument }}" type="document"
+                                   class="form-control cpfcnpj" name="document">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Data Aniversário</label>
+                            <input readonly value="{{ customer.getBirthday|date("d/m/Y") }}" type="text"
+                                   class="form-control"
+                                   data-mask="00/00/0000" name="birthday">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Sexo</label>
+                            <select disabled class="custom-select" name="gender">
+                                <option {% if customer.getGender == 'F' %} selected="selected" {% endif %} value="F">
+                                    Feminino
+                                </option>
+                                <option {% if customer.getGender == 'M' %} selected="selected" {% endif %} value="M">
+                                    Masculino
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Estado Civil</label>
+                            <select disabled class="custom-select" name="civil_status">
+                                <option {% if customer.getCivilStatus == 1 %} selected="selected" {% endif %} value="1">
+                                    Solteiro
+                                </option>
+                                <option {% if customer.getCivilStatus == 2 %} selected="selected" {% endif %} value="2">
+                                    Casado
+                                </option>
+                                <option {% if customer.getCivilStatus == 3 %} selected="selected" {% endif %} value="3">
+                                    Separado
+                                </option>
+                                <option {% if customer.getCivilStatus == 4 %} selected="selected" {% endif %} value="4">
+                                    Divorciado
+                                </option>
+                                <option {% if customer.getCivilStatus == 5 %} selected="selected" {% endif %} value="5">
+                                    Viúvo
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>CNH</label>
+                            <input readonly value="{{ customer.getDocumentCnh }}" type="text" class="form-control"
+                                   name="document_cnh"
+                                   maxlength="60">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Primeira Habilitação</label>
+                            <input readonly value="{{ customer.getFirstCnhDate|date("d/m/Y") }}" type="text"
+                                   data-mask="00/00/0000"
+                                   class="form-control" name="first_cnh_date">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Data Emissão</label>
+                            <input readonly value="{{ customer.getEmissionCnhDate|date("d/m/Y") }}" type="text"
+                                   data-mask="00/00/0000"
+                                   class="form-control" name="emission_cnh_date">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Data Vencimento</label>
+                            <input readonly value="{{ customer.getCnhDueDate|date("d/m/Y") }}" type="text"
+                                   data-mask="00/00/0000"
+                                   class="form-control" name="cnh_due_date">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>RG</label>
+                            <input readonly type="text" class="form-control" required name="document_rg"
+                                   value="{{ customer.getDocumentRg }}">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Orgão Expedidor</label>
+                            <input readonly type="text" class="form-control" required name="document_rg_origin"
+                                   value="{{ customer.getDocumentRgOrigin }}">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Data de Expedição</label>
+                            <input readonly
+                                   value="{{ customer.getDocumentRgDate ? customer.getDocumentRgDate|date("d/m/Y") : '' }}"
+                                   type="text" data-mask="00/00/0000"
+                                   class="form-control" name="document_rg_date">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Profissão</label>
+                            <input readonly value="{{ customer.getProfession }}" type="text" class="form-control"
+                                   name="profession">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Observações</label>
+                            <textarea readonly type="text" class="form-control" rows="3"
+                                      name="observation">{{ customer.getObservation }}</textarea>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <button hidden type="button" class="btn btn-sm btn-info btn_fieldset_bank">Banco</button>
+                    </div>
+                </div>
+
+                {% if banks is iterable and banks|length > 0 %}
+                    {% for b in banks %}
+                        <fieldset class="form-fieldset" id="{{ b.getHash }}">
+                            <legend>Bancos</legend>
+                            <div>
+                                <div class="form-row">
+                                    <div class="form-group form-group-default col-md-8 form-group-default-select2">
+                                        <label>Banco</label>
+                                        <select disabled class="custom-select"
+                                                name="banks[{{ b.getHash }}][bank]">
+                                            <option {% if b.getBank == "332" %} selected="selected" {% endif %}
+                                                    value="332"> 332-Acesso
+                                                Soluções de Pagamento S.A.
+                                            </option>
+                                            <option {% if b.getBank == "117" %} selected="selected" {% endif %}
+                                                    value="117">
+                                                117-ADVANCED CORRETORA DE CÂMBIO LTDA
+                                            </option>
+                                            <option {% if b.getBank == "272" %} selected="selected" {% endif %}
+                                                    value="272"> 272-AGK
+                                                CORRETORA DE CAMBIO S.A.
+                                            </option>
+                                            <option {% if b.getBank == "349" %} selected="selected" {% endif %}
+                                                    value="349"> 349-AMAGGI
+                                                S.A. - CRÉDITO, FINANCIAMENTO E INVESTIMENTO
+                                            </option>
+                                            <option {% if b.getBank == "188" %} selected="selected" {% endif %}
+                                                    value="188"> 188-ATIVA
+                                                INVESTIMENTOS S.A. CORRETORA DE TÍTULOS, CÂMBIO E VALORES
+                                            </option>
+                                            <option {% if b.getBank == "280" %} selected="selected" {% endif %}
+                                                    value="280"> 280-Avista
+                                                S.A. Crédito, Financiamento e Investimento
+                                            </option>
+                                            <option {% if b.getBank == "080" %} selected="selected" {% endif %}
+                                                    value="080"> 080-B&T
+                                                CORRETORA DE CAMBIO LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "654" %} selected="selected" {% endif %}
+                                                    value="654"> 654-Banco
+                                                A.J.Renner S.A.
+                                            </option>
+                                            <option {% if b.getBank == "246" %} selected="selected" {% endif %}
+                                                    value="246"> 246-Banco
+                                                ABC Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "075" %} selected="selected" {% endif %}
+                                                    value="075"> 075-Banco
+                                                ABN AMRO S.A.
+                                            </option>
+                                            <option {% if b.getBank == "121" %} selected="selected" {% endif %}
+                                                    value="121"> 121-Banco
+                                                Agibank S.A.
+                                            </option>
+                                            <option {% if b.getBank == "025" %} selected="selected" {% endif %}
+                                                    value="025"> 025-Banco
+                                                Alfa S.A.
+                                            </option>
+                                            <option {% if b.getBank == "065" %} selected="selected" {% endif %}
+                                                    value="065"> 065-Banco
+                                                Andbank (Brasil) S.A.
+                                            </option>
+                                            <option {% if b.getBank == "213" %} selected="selected" {% endif %}
+                                                    value="213"> 213-Banco
+                                                Arbi S.A.
+                                            </option>
+                                            <option {% if b.getBank == "096" %} selected="selected" {% endif %}
+                                                    value="096"> 096-Banco
+                                                B3 S.A.
+                                            </option>
+                                            <option {% if b.getBank == "024" %} selected="selected" {% endif %}
+                                                    value="024"> 024-Banco
+                                                BANDEPE S.A.
+                                            </option>
+                                            <option {% if b.getBank == "330" %} selected="selected" {% endif %}
+                                                    value="330"> 330-Banco
+                                                Bari de Investimentos e Financiamentos S/A
+                                            </option>
+                                            <option {% if b.getBank == "318" %} selected="selected" {% endif %}
+                                                    value="318"> 318-Banco
+                                                BMG S.A.
+                                            </option>
+                                            <option {% if b.getBank == "752" %} selected="selected" {% endif %}
+                                                    value="752"> 752-Banco
+                                                BNP Paribas Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "107" %} selected="selected" {% endif %}
+                                                    value="107"> 107-Banco
+                                                BOCOM BBM S.A.
+                                            </option>
+                                            <option {% if b.getBank == "063" %} selected="selected" {% endif %}
+                                                    value="063"> 063-Banco
+                                                Bradescard S.A.
+                                            </option>
+                                            <option {% if b.getBank == "036" %} selected="selected" {% endif %}
+                                                    value="036"> 036-Banco
+                                                Bradesco BBI S.A.
+                                            </option>
+                                            <option {% if b.getBank == "122" %} selected="selected" {% endif %}
+                                                    value="122"> 122-Banco
+                                                Bradesco BERJ S.A.
+                                            </option>
+                                            <option {% if b.getBank == "394" %} selected="selected" {% endif %}
+                                                    value="394"> 394-Banco
+                                                Bradesco Financiamentos S.A.
+                                            </option>
+                                            <option {% if b.getBank == "237" %} selected="selected" {% endif %}
+                                                    value="237"> 237-Banco
+                                                Bradesco S.A.
+                                            </option>
+                                            <option {% if b.getBank == "218" %} selected="selected" {% endif %}
+                                                    value="218"> 218-Banco
+                                                BS2 S.A.
+                                            </option>
+                                            <option {% if b.getBank == "208" %} selected="selected" {% endif %}
+                                                    value="208"> 208-Banco
+                                                BTG Pactual S.A.
+                                            </option>
+                                            <option {% if b.getBank == "336" %} selected="selected" {% endif %}
+                                                    value="336"> 336-Banco
+                                                C6 S.A.
+                                            </option>
+                                            <option {% if b.getBank == "473" %} selected="selected" {% endif %}
+                                                    value="473"> 473-Banco
+                                                Caixa Geral - Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "412" %} selected="selected" {% endif %}
+                                                    value="412"> 412-Banco
+                                                Capital S.A.
+                                            </option>
+                                            <option {% if b.getBank == "040" %} selected="selected" {% endif %}
+                                                    value="040"> 040-Banco
+                                                Cargill S.A.
+                                            </option>
+                                            <option {% if b.getBank == "739" %} selected="selected" {% endif %}
+                                                    value="739"> 739-Banco
+                                                Cetelem S.A.
+                                            </option>
+                                            <option {% if b.getBank == "233" %} selected="selected" {% endif %}
+                                                    value="233"> 233-Banco
+                                                Cifra S.A.
+                                            </option>
+                                            <option {% if b.getBank == "745" %} selected="selected" {% endif %}
+                                                    value="745"> 745-Banco
+                                                Citibank S.A.
+                                            </option>
+                                            <option {% if b.getBank == "241" %} selected="selected" {% endif %}
+                                                    value="241"> 241-Banco
+                                                Clássico S.A.
+                                            </option>
+                                            <option {% if b.getBank == "756" %} selected="selected" {% endif %}
+                                                    value="756"> 756-Banco
+                                                Cooperativo do Brasil S.A. - BANCOOB
+                                            </option>
+                                            <option {% if b.getBank == "748" %} selected="selected" {% endif %}
+                                                    value="748"> 748-Banco
+                                                Cooperativo Sicredi S.A.
+                                            </option>
+                                            <option {% if b.getBank == "222" %} selected="selected" {% endif %}
+                                                    value="222"> 222-Banco
+                                                Credit Agricole Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "505" %} selected="selected" {% endif %}
+                                                    value="505"> 505-Banco
+                                                Credit Suisse (Brasil) S.A.
+                                            </option>
+                                            <option {% if b.getBank == "069" %} selected="selected" {% endif %}
+                                                    value="069"> 069-Banco
+                                                Crefisa S.A.
+                                            </option>
+                                            <option {% if b.getBank == "266" %} selected="selected" {% endif %}
+                                                    value="266"> 266-Banco
+                                                Cédula S.A.
+                                            </option>
+                                            <option {% if b.getBank == "003" %} selected="selected" {% endif %}
+                                                    value="003"> 003-Banco
+                                                da Amazônia S.A.
+                                            </option>
+                                            <option {% if b.getBank == "083" %} selected="selected" {% endif %}
+                                                    value="083"> 083-Banco
+                                                da China Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "707" %} selected="selected" {% endif %}
+                                                    value="707"> 707-Banco
+                                                Daycoval S.A.
+                                            </option>
+                                            <option {% if b.getBank == "300" %} selected="selected" {% endif %}
+                                                    value="300"> 300-Banco
+                                                de La Nacion Argentina
+                                            </option>
+                                            <option {% if b.getBank == "495" %} selected="selected" {% endif %}
+                                                    value="495"> 495-Banco
+                                                de La Provincia de Buenos Aires
+                                            </option>
+                                            <option {% if b.getBank == "335" %} selected="selected" {% endif %}
+                                                    value="335"> 335-Banco
+                                                Digio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "001" %} selected="selected" {% endif %}
+                                                    value="001"> 001-Banco
+                                                do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "047" %} selected="selected" {% endif %}
+                                                    value="047"> 047-Banco
+                                                do Estado de Sergipe S.A.
+                                            </option>
+                                            <option {% if b.getBank == "037" %} selected="selected" {% endif %}
+                                                    value="037"> 037-Banco
+                                                do Estado do Pará S.A.
+                                            </option>
+                                            <option {% if b.getBank == "041" %} selected="selected" {% endif %}
+                                                    value="041"> 041-Banco
+                                                do Estado do Rio Grande do Sul S.A.
+                                            </option>
+                                            <option {% if b.getBank == "004" %} selected="selected" {% endif %}
+                                                    value="004"> 004-Banco
+                                                do Nordeste do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "265" %} selected="selected" {% endif %}
+                                                    value="265"> 265-Banco
+                                                Fator S.A.
+                                            </option>
+                                            <option {% if b.getBank == "224" %} selected="selected" {% endif %}
+                                                    value="224"> 224-Banco
+                                                Fibra S.A.
+                                            </option>
+                                            <option {% if b.getBank == "626" %} selected="selected" {% endif %}
+                                                    value="626"> 626-Banco
+                                                Ficsa S.A.
+                                            </option>
+                                            <option {% if b.getBank == "094" %} selected="selected" {% endif %}
+                                                    value="094"> 094-Banco
+                                                Finaxis S.A.
+                                            </option>
+                                            <option {% if b.getBank == "612" %} selected="selected" {% endif %}
+                                                    value="612"> 612-Banco
+                                                Guanabara S.A.
+                                            </option>
+                                            <option {% if b.getBank == "012" %} selected="selected" {% endif %}
+                                                    value="012"> 012-Banco
+                                                Inbursa S.A.
+                                            </option>
+                                            <option {% if b.getBank == "604" %} selected="selected" {% endif %}
+                                                    value="604"> 604-Banco
+                                                Industrial do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "653" %} selected="selected" {% endif %}
+                                                    value="653"> 653-Banco
+                                                Indusval S.A.
+                                            </option>
+                                            <option {% if b.getBank == "077" %} selected="selected" {% endif %}
+                                                    value="077"> 077-Banco
+                                                Inter S.A.
+                                            </option>
+                                            <option {% if b.getBank == "249" %} selected="selected" {% endif %}
+                                                    value="249"> 249-Banco
+                                                Investcred Unibanco S.A.
+                                            </option>
+                                            <option {% if b.getBank == "479" %} selected="selected" {% endif %}
+                                                    value="479"> 479-Banco
+                                                ItauBank S.A
+                                            </option>
+                                            <option {% if b.getBank == "184" %} selected="selected" {% endif %}
+                                                    value="184"> 184-Banco
+                                                Itaú BBA S.A.
+                                            </option>
+                                            <option {% if b.getBank == "029" %} selected="selected" {% endif %}
+                                                    value="029"> 029-Banco
+                                                Itaú Consignado S.A.
+                                            </option>
+                                            <option {% if b.getBank == "376" %} selected="selected" {% endif %}
+                                                    value="376"> 376-Banco
+                                                J. P. Morgan S.A.
+                                            </option>
+                                            <option {% if b.getBank == "074" %} selected="selected" {% endif %}
+                                                    value="074"> 074-Banco
+                                                J. Safra S.A.
+                                            </option>
+                                            <option {% if b.getBank == "217" %} selected="selected" {% endif %}
+                                                    value="217"> 217-Banco
+                                                John Deere S.A.
+                                            </option>
+                                            <option {% if b.getBank == "076" %} selected="selected" {% endif %}
+                                                    value="076"> 076-Banco
+                                                KDB S.A.
+                                            </option>
+                                            <option {% if b.getBank == "757" %} selected="selected" {% endif %}
+                                                    value="757"> 757-Banco
+                                                KEB HANA do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "600" %} selected="selected" {% endif %}
+                                                    value="600"> 600-Banco
+                                                Luso Brasileiro S.A.
+                                            </option>
+                                            <option {% if b.getBank == "389" %} selected="selected" {% endif %}
+                                                    value="389"> 389-Banco
+                                                Mercantil do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "370" %} selected="selected" {% endif %}
+                                                    value="370"> 370-Banco
+                                                Mizuho do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "746" %} selected="selected" {% endif %}
+                                                    value="746"> 746-Banco
+                                                Modal S.A.
+                                            </option>
+                                            <option {% if b.getBank == "066" %} selected="selected" {% endif %}
+                                                    value="066"> 066-Banco
+                                                Morgan Stanley S.A.
+                                            </option>
+                                            <option {% if b.getBank == "456" %} selected="selected" {% endif %}
+                                                    value="456"> 456-Banco
+                                                MUFG Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "243" %} selected="selected" {% endif %}
+                                                    value="243"> 243-Banco
+                                                Máxima S.A.
+                                            </option>
+                                            <option {% if b.getBank == "007" %} selected="selected" {% endif %}
+                                                    value="007"> 007-Banco
+                                                Nacional de Desenvolvimento Econômico e Social - BNDES
+                                            </option>
+                                            <option {% if b.getBank == "169" %} selected="selected" {% endif %}
+                                                    value="169"> 169-Banco
+                                                Olé Bonsucesso Consignado S.A.
+                                            </option>
+                                            <option {% if b.getBank == "079" %} selected="selected" {% endif %}
+                                                    value="079"> 079-Banco
+                                                Original do Agronegócio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "212" %} selected="selected" {% endif %}
+                                                    value="212"> 212-Banco
+                                                Original S.A.
+                                            </option>
+                                            <option {% if b.getBank == "712" %} selected="selected" {% endif %}
+                                                    value="712"> 712-Banco
+                                                Ourinvest S.A.
+                                            </option>
+                                            <option {% if b.getBank == "623" %} selected="selected" {% endif %}
+                                                    value="623"> 623-Banco
+                                                PAN S.A.
+                                            </option>
+                                            <option {% if b.getBank == "611" %} selected="selected" {% endif %}
+                                                    value="611"> 611-Banco
+                                                Paulista S.A.
+                                            </option>
+                                            <option {% if b.getBank == "643" %} selected="selected" {% endif %}
+                                                    value="643"> 643-Banco
+                                                Pine S.A.
+                                            </option>
+                                            <option {% if b.getBank == "747" %} selected="selected" {% endif %}
+                                                    value="747"> 747-Banco
+                                                Rabobank International Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "633" %} selected="selected" {% endif %}
+                                                    value="633"> 633-Banco
+                                                Rendimento S.A.
+                                            </option>
+                                            <option {% if b.getBank == "741" %} selected="selected" {% endif %}
+                                                    value="741"> 741-Banco
+                                                Ribeirão Preto S.A.
+                                            </option>
+                                            <option {% if b.getBank == "120" %} selected="selected" {% endif %}
+                                                    value="120"> 120-Banco
+                                                Rodobens S.A.
+                                            </option>
+                                            <option {% if b.getBank == "422" %} selected="selected" {% endif %}
+                                                    value="422"> 422-Banco
+                                                Safra S.A.
+                                            </option>
+                                            <option {% if b.getBank == "033" %} selected="selected" {% endif %}
+                                                    value="033"> 033-Banco
+                                                Santander (Brasil) S.A.
+                                            </option>
+                                            <option {% if b.getBank == "743" %} selected="selected" {% endif %}
+                                                    value="743"> 743-Banco
+                                                Semear S.A.
+                                            </option>
+                                            <option {% if b.getBank == "754" %} selected="selected" {% endif %}
+                                                    value="754"> 754-Banco
+                                                Sistema S.A.
+                                            </option>
+                                            <option {% if b.getBank == "630" %} selected="selected" {% endif %}
+                                                    value="630"> 630-Banco
+                                                Smartbank S.A.
+                                            </option>
+                                            <option {% if b.getBank == "366" %} selected="selected" {% endif %}
+                                                    value="366"> 366-Banco
+                                                Société Générale Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "637" %} selected="selected" {% endif %}
+                                                    value="637"> 637-Banco
+                                                Sofisa S.A.
+                                            </option>
+                                            <option {% if b.getBank == "464" %} selected="selected" {% endif %}
+                                                    value="464"> 464-Banco
+                                                Sumitomo Mitsui Brasileiro S.A.
+                                            </option>
+                                            <option {% if b.getBank == "082" %} selected="selected" {% endif %}
+                                                    value="082"> 082-Banco
+                                                Topázio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "018" %} selected="selected" {% endif %}
+                                                    value="018"> 018-Banco
+                                                Tricury S.A.
+                                            </option>
+                                            <option {% if b.getBank == "634" %} selected="selected" {% endif %}
+                                                    value="634"> 634-Banco
+                                                Triângulo S.A.
+                                            </option>
+                                            <option {% if b.getBank == "655" %} selected="selected" {% endif %}
+                                                    value="655"> 655-Banco
+                                                Votorantim S.A.
+                                            </option>
+                                            <option {% if b.getBank == "610" %} selected="selected" {% endif %}
+                                                    value="610"> 610-Banco
+                                                VR S.A.
+                                            </option>
+                                            <option {% if b.getBank == "119" %} selected="selected" {% endif %}
+                                                    value="119"> 119-Banco
+                                                Western Union do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "124" %} selected="selected" {% endif %}
+                                                    value="124"> 124-Banco
+                                                Woori Bank do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "348" %} selected="selected" {% endif %}
+                                                    value="348"> 348-Banco
+                                                XP S.A.
+                                            </option>
+                                            <option {% if b.getBank == "081" %} selected="selected" {% endif %}
+                                                    value="081">
+                                                081-BancoSeguro S.A.
+                                            </option>
+                                            <option {% if b.getBank == "021" %} selected="selected" {% endif %}
+                                                    value="021">
+                                                021-BANESTES S.A. Banco do Estado do Espírito Santo
+                                            </option>
+                                            <option {% if b.getBank == "755" %} selected="selected" {% endif %}
+                                                    value="755"> 755-Bank of
+                                                America Merrill Lynch Banco Múltiplo S.A.
+                                            </option>
+                                            <option {% if b.getBank == "268" %} selected="selected" {% endif %}
+                                                    value="268"> 268-BARI
+                                                COMPANHIA HIPOTECÁRIA
+                                            </option>
+                                            <option {% if b.getBank == "250" %} selected="selected" {% endif %}
+                                                    value="250"> 250-BCV -
+                                                Banco de Crédito e Varejo S.A.
+                                            </option>
+                                            <option {% if b.getBank == "144" %} selected="selected" {% endif %}
+                                                    value="144"> 144-BEXS
+                                                Banco de Câmbio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "253" %} selected="selected" {% endif %}
+                                                    value="253"> 253-Bexs
+                                                Corretora de Câmbio S/A
+                                            </option>
+                                            <option {% if b.getBank == "134" %} selected="selected" {% endif %}
+                                                    value="134"> 134-BGC
+                                                LIQUIDEZ DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA
+                                            </option>
+                                            <option {% if b.getBank == "017" %} selected="selected" {% endif %}
+                                                    value="017"> 017-BNY
+                                                Mellon Banco S.A.
+                                            </option>
+                                            <option {% if b.getBank == "301" %} selected="selected" {% endif %}
+                                                    value="301"> 301-BPP
+                                                Instituição de Pagamento S.A.
+                                            </option>
+                                            <option {% if b.getBank == "126" %} selected="selected" {% endif %}
+                                                    value="126"> 126-BR
+                                                Partners Banco de Investimento S.A.
+                                            </option>
+                                            <option {% if b.getBank == "070" %} selected="selected" {% endif %}
+                                                    value="070"> 070-BRB -
+                                                Banco de Brasília S.A.
+                                            </option>
+                                            <option {% if b.getBank == "092" %} selected="selected" {% endif %}
+                                                    value="092">
+                                                092-Brickell S.A. Crédito
+                                            </option>
+                                            <option {% if b.getBank == "173" %} selected="selected" {% endif %}
+                                                    value="173"> 173-BRL
+                                                Trust Distribuidora de Títulos e Valores Mobiliários S.A.
+                                            </option>
+                                            <option {% if b.getBank == "142" %} selected="selected" {% endif %}
+                                                    value="142"> 142-Broker
+                                                Brasil Corretora de Câmbio Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "292" %} selected="selected" {% endif %}
+                                                    value="292"> 292-BS2
+                                                Distribuidora de Títulos e Valores Mobiliários S.A.
+                                            </option>
+                                            <option {% if b.getBank == "104" %} selected="selected" {% endif %}
+                                                    value="104"> 104-Caixa
+                                                Econômica Federal
+                                            </option>
+                                            <option {% if b.getBank == "309" %} selected="selected" {% endif %}
+                                                    value="309">
+                                                309-CAMBIONET CORRETORA DE CÂMBIO LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "288" %} selected="selected" {% endif %}
+                                                    value="288"> 288-CAROL
+                                                DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "130" %} selected="selected" {% endif %}
+                                                    value="130"> 130-CARUANA
+                                                S.A. - SOCIEDADE DE CRÉDITO, FINANCIAMENTO E INVESTIMENTO
+                                            </option>
+                                            <option {% if b.getBank == "159" %} selected="selected" {% endif %}
+                                                    value="159"> 159-Casa do
+                                                Crédito S.A. Sociedade de Crédito ao Microempreendedor
+                                            </option>
+                                            <option {% if b.getBank == "114" %} selected="selected" {% endif %}
+                                                    value="114"> 114-Central
+                                                Cooperativa de Crédito no Estado do Espírito Santo - CECOOP
+                                            </option>
+                                            <option {% if b.getBank == "091" %} selected="selected" {% endif %}
+                                                    value="091"> 091-CENTRAL
+                                                DE COOPERATIVAS DE ECONOMIA E CRÉDITO MÚTUO DO ESTADO DO RIO GRANDE DO S
+                                            </option>
+                                            <option {% if b.getBank == "320" %} selected="selected" {% endif %}
+                                                    value="320"> 320-China
+                                                Construction Bank (Brasil) Banco Múltiplo S.A.
+                                            </option>
+                                            <option {% if b.getBank == "477" %} selected="selected" {% endif %}
+                                                    value="477">
+                                                477-Citibank N.A.
+                                            </option>
+                                            <option {% if b.getBank == "180" %} selected="selected" {% endif %}
+                                                    value="180"> 180-CM
+                                                CAPITAL MARKETS CORRETORA DE CÂMBIO, TÍTULOS E VALORES MOBILIÁRIOS LTDA
+                                            </option>
+                                            <option {% if b.getBank == "127" %} selected="selected" {% endif %}
+                                                    value="127"> 127-Codepe
+                                                Corretora de Valores e Câmbio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "163" %} selected="selected" {% endif %}
+                                                    value="163">
+                                                163-Commerzbank Brasil S.A. - Banco Múltiplo
+                                            </option>
+                                            <option {% if b.getBank == "133" %} selected="selected" {% endif %}
+                                                    value="133">
+                                                133-CONFEDERAÇÃO NACIONAL DAS COOPERATIVAS CENTRAIS DE CRÉDITO E
+                                                ECONOMIA FAMILIAR E
+                                            </option>
+                                            <option {% if b.getBank == "136" %} selected="selected" {% endif %}
+                                                    value="136">
+                                                136-CONFEDERAÇÃO NACIONAL DAS COOPERATIVAS CENTRAIS UNICRED LTDA. -
+                                                UNICRED DO BRASI
+                                            </option>
+                                            <option {% if b.getBank == "060" %} selected="selected" {% endif %}
+                                                    value="060">
+                                                060-Confidence Corretora de Câmbio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "085" %} selected="selected" {% endif %}
+                                                    value="085">
+                                                085-Cooperativa Central de Crédito - AILOS
+                                            </option>
+                                            <option {% if b.getBank == "097" %} selected="selected" {% endif %}
+                                                    value="097">
+                                                097-Cooperativa Central de Crédito Noroeste Brasileiro Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "279" %} selected="selected" {% endif %}
+                                                    value="279">
+                                                279-COOPERATIVA DE CREDITO RURAL DE PRIMAVERA DO LESTE
+                                            </option>
+                                            <option {% if b.getBank == "016" %} selected="selected" {% endif %}
+                                                    value="016">
+                                                016-COOPERATIVA DE CRÉDITO MÚTUO DOS DESPACHANTES DE TRÂNSITO DE SANTA
+                                                CATARINA E RI
+                                            </option>
+                                            <option {% if b.getBank == "281" %} selected="selected" {% endif %}
+                                                    value="281">
+                                                281-Cooperativa de Crédito Rural Coopavel
+                                            </option>
+                                            <option {% if b.getBank == "322" %} selected="selected" {% endif %}
+                                                    value="322">
+                                                322-Cooperativa de Crédito Rural de Abelardo Luz - Sulcredi/Crediluz
+                                            </option>
+                                            <option {% if b.getBank == "286" %} selected="selected" {% endif %}
+                                                    value="286">
+                                                286-COOPERATIVA DE CRÉDITO RURAL DE OURO SULCREDI/OURO
+                                            </option>
+                                            <option {% if b.getBank == "273" %} selected="selected" {% endif %}
+                                                    value="273">
+                                                273-Cooperativa de Crédito Rural de São Miguel do Oeste - Sulcredi/São
+                                                Miguel
+                                            </option>
+                                            <option {% if b.getBank == "098" %} selected="selected" {% endif %}
+                                                    value="098">
+                                                098-Credialiança Cooperativa de Crédito Rural
+                                            </option>
+                                            <option {% if b.getBank == "010" %} selected="selected" {% endif %}
+                                                    value="010">
+                                                010-CREDICOAMO CREDITO RURAL COOPERATIVA
+                                            </option>
+                                            <option {% if b.getBank == "089" %} selected="selected" {% endif %}
+                                                    value="089">
+                                                089-CREDISAN COOPERATIVA DE CRÉDITO
+                                            </option>
+                                            <option {% if b.getBank == "011" %} selected="selected" {% endif %}
+                                                    value="011"> 011-CREDIT
+                                                SUISSE HEDGING-GRIFFO CORRETORA DE VALORES S.A
+                                            </option>
+                                            <option {% if b.getBank == "342" %} selected="selected" {% endif %}
+                                                    value="342">
+                                                342-Creditas Sociedade de Crédito Direto S.A.
+                                            </option>
+                                            <option {% if b.getBank == "321" %} selected="selected" {% endif %}
+                                                    value="321"> 321-CREFAZ
+                                                SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E A EMPRESA DE PEQUENO PORTE
+                                                LT
+                                            </option>
+                                            <option {% if b.getBank == "289" %} selected="selected" {% endif %}
+                                                    value="289"> 289-DECYSEO
+                                                CORRETORA DE CAMBIO LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "487" %} selected="selected" {% endif %}
+                                                    value="487">
+                                                487-Deutsche Bank S.A. - Banco Alemão
+                                            </option>
+                                            <option {% if b.getBank == "140" %} selected="selected" {% endif %}
+                                                    value="140">
+                                                140-Easynvest - Título Corretora de Valores SA
+                                            </option>
+                                            <option {% if b.getBank == "149" %} selected="selected" {% endif %}
+                                                    value="149"> 149-Facta
+                                                Financeira S.A. - Crédito Financiamento e Investimento
+                                            </option>
+                                            <option {% if b.getBank == "196" %} selected="selected" {% endif %}
+                                                    value="196"> 196-FAIR
+                                                CORRETORA DE CAMBIO S.A.
+                                            </option>
+                                            <option {% if b.getBank == "343" %} selected="selected" {% endif %}
+                                                    value="343"> 343-FFA
+                                                SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À EMPRESA DE PEQUENO PORTE
+                                                LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "331" %} selected="selected" {% endif %}
+                                                    value="331"> 331-Fram
+                                                Capital Distribuidora de Títulos e Valores Mobiliários S.A.
+                                            </option>
+                                            <option {% if b.getBank == "285" %} selected="selected" {% endif %}
+                                                    value="285"> 285-Frente
+                                                Corretora de Câmbio Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "278" %} selected="selected" {% endif %}
+                                                    value="278"> 278-Genial
+                                                Investimentos Corretora de Valores Mobiliários S.A.
+                                            </option>
+                                            <option {% if b.getBank == "364" %} selected="selected" {% endif %}
+                                                    value="364">
+                                                364-GERENCIANET PAGAMENTOS DO BRASIL LTDA
+                                            </option>
+                                            <option {% if b.getBank == "138" %} selected="selected" {% endif %}
+                                                    value="138"> 138-Get
+                                                Money Corretora de Câmbio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "064" %} selected="selected" {% endif %}
+                                                    value="064"> 064-Goldman
+                                                Sachs do Brasil Banco Múltiplo S.A.
+                                            </option>
+                                            <option {% if b.getBank == "177" %} selected="selected" {% endif %}
+                                                    value="177"> 177-Guide
+                                                Investimentos S.A. Corretora de Valores
+                                            </option>
+                                            <option {% if b.getBank == "146" %} selected="selected" {% endif %}
+                                                    value="146"> 146-GUITTA
+                                                CORRETORA DE CAMBIO LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "078" %} selected="selected" {% endif %}
+                                                    value="078"> 078-Haitong
+                                                Banco de Investimento do Brasil S.A.
+                                            </option>
+                                            <option {% if b.getBank == "062" %} selected="selected" {% endif %}
+                                                    value="062">
+                                                062-Hipercard Banco Múltiplo S.A.
+                                            </option>
+                                            <option {% if b.getBank == "189" %} selected="selected" {% endif %}
+                                                    value="189"> 189-HS
+                                                FINANCEIRA S/A CREDITO, FINANCIAMENTO E INVESTIMENTOS
+                                            </option>
+                                            <option {% if b.getBank == "269" %} selected="selected" {% endif %}
+                                                    value="269"> 269-HSBC
+                                                Brasil S.A. - Banco de Investimento
+                                            </option>
+                                            <option {% if b.getBank == "271" %} selected="selected" {% endif %}
+                                                    value="271"> 271-IB
+                                                Corretora de Câmbio, Títulos e Valores Mobiliários S.A.
+                                            </option>
+                                            <option {% if b.getBank == "157" %} selected="selected" {% endif %}
+                                                    value="157"> 157-ICAP do
+                                                Brasil Corretora de Títulos e Valores Mobiliários Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "132" %} selected="selected" {% endif %}
+                                                    value="132"> 132-ICBC do
+                                                Brasil Banco Múltiplo S.A.
+                                            </option>
+                                            <option {% if b.getBank == "492" %} selected="selected" {% endif %}
+                                                    value="492"> 492-ING
+                                                Bank N.V.
+                                            </option>
+                                            <option {% if b.getBank == "139" %} selected="selected" {% endif %}
+                                                    value="139"> 139-Intesa
+                                                Sanpaolo Brasil S.A. - Banco Múltiplo
+                                            </option>
+                                            <option {% if b.getBank == "652" %} selected="selected" {% endif %}
+                                                    value="652"> 652-Itaú
+                                                Unibanco Holding S.A.
+                                            </option>
+                                            <option {% if b.getBank == "341" %} selected="selected" {% endif %}
+                                                    value="341"> 341-Itaú
+                                                Unibanco S.A.
+                                            </option>
+                                            <option {% if b.getBank == "488" %} selected="selected" {% endif %}
+                                                    value="488">
+                                                488-JPMorgan Chase Bank
+                                            </option>
+                                            <option {% if b.getBank == "399" %} selected="selected" {% endif %}
+                                                    value="399"> 399-Kirton
+                                                Bank S.A. - Banco Múltiplo
+                                            </option>
+                                            <option {% if b.getBank == "293" %} selected="selected" {% endif %}
+                                                    value="293"> 293-Lastro
+                                                RDV Distribuidora de Títulos e Valores Mobiliários Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "105" %} selected="selected" {% endif %}
+                                                    value="105"> 105-Lecca
+                                                Crédito, Financiamento e Investimento S/A
+                                            </option>
+                                            <option {% if b.getBank == "145" %} selected="selected" {% endif %}
+                                                    value="145"> 145-LEVYCAM
+                                                - CORRETORA DE CAMBIO E VALORES LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "113" %} selected="selected" {% endif %}
+                                                    value="113">
+                                                113-Magliano S.A. Corretora de Cambio e Valores Mobiliarios
+                                            </option>
+                                            <option {% if b.getBank == "323" %} selected="selected" {% endif %}
+                                                    value="323">
+                                                323-MERCADOPAGO.COM REPRESENTACOES LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "274" %} selected="selected" {% endif %}
+                                                    value="274"> 274-MONEY
+                                                PLUS SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E A EMPRESA DE PEQUENO
+                                                PORT
+                                            </option>
+                                            <option {% if b.getBank == "259" %} selected="selected" {% endif %}
+                                                    value="259">
+                                                259-MONEYCORP BANCO DE CÂMBIO S.A.
+                                            </option>
+                                            <option {% if b.getBank == "128" %} selected="selected" {% endif %}
+                                                    value="128"> 128-MS Bank
+                                                S.A. Banco de Câmbio
+                                            </option>
+                                            <option {% if b.getBank == "354" %} selected="selected" {% endif %}
+                                                    value="354"> 354-NECTON
+                                                INVESTIMENTOS S.A. CORRETORA DE VALORES MOBILIÁRIOS E COMMODITIES
+                                            </option>
+                                            <option {% if b.getBank == "191" %} selected="selected" {% endif %}
+                                                    value="191"> 191-Nova
+                                                Futura Corretora de Títulos e Valores Mobiliários Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "753" %} selected="selected" {% endif %}
+                                                    value="753"> 753-Novo
+                                                Banco Continental S.A. - Banco Múltiplo
+                                            </option>
+                                            <option {% if b.getBank == "260" %} selected="selected" {% endif %}
+                                                    value="260"> 260-Nu
+                                                Pagamentos S.A.
+                                            </option>
+                                            <option {% if b.getBank == "111" %} selected="selected" {% endif %}
+                                                    value="111">
+                                                111-OLIVEIRA TRUST DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIARIOS S.A.
+                                            </option>
+                                            <option {% if b.getBank == "319" %} selected="selected" {% endif %}
+                                                    value="319"> 319-OM
+                                                DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA
+                                            </option>
+                                            <option {% if b.getBank == "613" %} selected="selected" {% endif %}
+                                                    value="613"> 613-Omni
+                                                Banco S.A.
+                                            </option>
+                                            <option {% if b.getBank == "290" %} selected="selected" {% endif %}
+                                                    value="290">
+                                                290-Pagseguro Internet S.A.
+                                            </option>
+                                            <option {% if b.getBank == "254" %} selected="selected" {% endif %}
+                                                    value="254"> 254-Paraná
+                                                Banco S.A.
+                                            </option>
+                                            <option {% if b.getBank == "326" %} selected="selected" {% endif %}
+                                                    value="326"> 326-PARATI
+                                                - CREDITO, FINANCIAMENTO E INVESTIMENTO S.A.
+                                            </option>
+                                            <option {% if b.getBank == "194" %} selected="selected" {% endif %}
+                                                    value="194">
+                                                194-PARMETAL DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA
+                                            </option>
+                                            <option {% if b.getBank == "174" %} selected="selected" {% endif %}
+                                                    value="174">
+                                                174-PERNAMBUCANAS FINANCIADORA S.A. - CRÉDITO, FINANCIAMENTO E
+                                                INVESTIMENTO
+                                            </option>
+                                            <option {% if b.getBank == "315" %} selected="selected" {% endif %}
+                                                    value="315"> 315-PI
+                                                Distribuidora de Títulos e Valores Mobiliários S.A.
+                                            </option>
+                                            <option {% if b.getBank == "100" %} selected="selected" {% endif %}
+                                                    value="100"> 100-Planner
+                                                Corretora de Valores S.A.
+                                            </option>
+                                            <option {% if b.getBank == "125" %} selected="selected" {% endif %}
+                                                    value="125"> 125-Plural
+                                                S.A. - Banco Múltiplo
+                                            </option>
+                                            <option {% if b.getBank == "108" %} selected="selected" {% endif %}
+                                                    value="108">
+                                                108-PORTOCRED S.A. - CREDITO, FINANCIAMENTO E INVESTIMENTO
+                                            </option>
+                                            <option {% if b.getBank == "306" %} selected="selected" {% endif %}
+                                                    value="306">
+                                                306-PORTOPAR DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "093" %} selected="selected" {% endif %}
+                                                    value="093">
+                                                093-PÓLOCRED SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À EMPRESA DE
+                                                PEQUENO PORT
+                                            </option>
+                                            <option {% if b.getBank == "329" %} selected="selected" {% endif %}
+                                                    value="329"> 329-QI
+                                                Sociedade de Crédito Direto S.A.
+                                            </option>
+                                            <option {% if b.getBank == "283" %} selected="selected" {% endif %}
+                                                    value="283"> 283-RB
+                                                CAPITAL INVESTIMENTOS DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS
+                                                LIMITADA
+                                            </option>
+                                            <option {% if b.getBank == "101" %} selected="selected" {% endif %}
+                                                    value="101">
+                                                101-RENASCENCA DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA
+                                            </option>
+                                            <option {% if b.getBank == "270" %} selected="selected" {% endif %}
+                                                    value="270"> 270-Sagitur
+                                                Corretora de Câmbio Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "751" %} selected="selected" {% endif %}
+                                                    value="751">
+                                                751-Scotiabank Brasil S.A. Banco Múltiplo
+                                            </option>
+                                            <option {% if b.getBank == "276" %} selected="selected" {% endif %}
+                                                    value="276"> 276-Senff
+                                                S.A. - Crédito, Financiamento e Investimento
+                                            </option>
+                                            <option {% if b.getBank == "545" %} selected="selected" {% endif %}
+                                                    value="545"> 545-SENSO
+                                                CORRETORA DE CAMBIO E VALORES MOBILIARIOS S.A
+                                            </option>
+                                            <option {% if b.getBank == "190" %} selected="selected" {% endif %}
+                                                    value="190">
+                                                190-SERVICOOP - COOPERATIVA DE CRÉDITO DOS SERVIDORES PÚBLICOS ESTADUAIS
+                                                DO RIO GRAN
+                                            </option>
+                                            <option {% if b.getBank == "183" %} selected="selected" {% endif %}
+                                                    value="183"> 183-SOCRED
+                                                S.A. - SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À EMPRESA DE PEQUENO
+                                                P
+                                            </option>
+                                            <option {% if b.getBank == "365" %} selected="selected" {% endif %}
+                                                    value="365"> 365-SOLIDUS
+                                                S.A. CORRETORA DE CAMBIO E VALORES MOBILIARIOS
+                                            </option>
+                                            <option {% if b.getBank == "299" %} selected="selected" {% endif %}
+                                                    value="299">
+                                                299-SOROCRED CRÉDITO, FINANCIAMENTO E INVESTIMENTO S.A.
+                                            </option>
+                                            <option {% if b.getBank == "014" %} selected="selected" {% endif %}
+                                                    value="014"> 014-State
+                                                Street Brasil S.A. - Banco Comercial
+                                            </option>
+                                            <option {% if b.getBank == "197" %} selected="selected" {% endif %}
+                                                    value="197"> 197-Stone
+                                                Pagamentos S.A.
+                                            </option>
+                                            <option {% if b.getBank == "340" %} selected="selected" {% endif %}
+                                                    value="340"> 340-Super
+                                                Pagamentos e Administração de Meios Eletrônicos S.A.
+                                            </option>
+                                            <option {% if b.getBank == "307" %} selected="selected" {% endif %}
+                                                    value="307"> 307-Terra
+                                                Investimentos Distribuidora de Títulos e Valores Mobiliários Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "352" %} selected="selected" {% endif %}
+                                                    value="352"> 352-TORO
+                                                CORRETORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA
+                                            </option>
+                                            <option {% if b.getBank == "095" %} selected="selected" {% endif %}
+                                                    value="095">
+                                                095-Travelex Banco de Câmbio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "143" %} selected="selected" {% endif %}
+                                                    value="143"> 143-Treviso
+                                                Corretora de Câmbio S.A.
+                                            </option>
+                                            <option {% if b.getBank == "131" %} selected="selected" {% endif %}
+                                                    value="131"> 131-TULLETT
+                                                PREBON BRASIL CORRETORA DE VALORES E CÂMBIO LTDA
+                                            </option>
+                                            <option {% if b.getBank == "129" %} selected="selected" {% endif %}
+                                                    value="129"> 129-UBS
+                                                Brasil Banco de Investimento S.A.
+                                            </option>
+                                            <option {% if b.getBank == "015" %} selected="selected" {% endif %}
+                                                    value="015"> 015-UBS
+                                                Brasil Corretora de Câmbio, Títulos e Valores Mobiliários S.A.
+                                            </option>
+                                            <option {% if b.getBank == "099" %} selected="selected" {% endif %}
+                                                    value="099">
+                                                099-UNIPRIME CENTRAL - CENTRAL INTERESTADUAL DE COOPERATIVAS DE CREDITO
+                                                LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "084" %} selected="selected" {% endif %}
+                                                    value="084">
+                                                084-Uniprime Norte do Paraná - Coop de Economia e Crédito Mútuo dos
+                                                Médicos
+                                            </option>
+                                            <option {% if b.getBank == "373" %} selected="selected" {% endif %}
+                                                    value="373"> 373-UP.P
+                                                SOCIEDADE DE EMPRÉSTIMO ENTRE PESSOAS S.A.
+                                            </option>
+                                            <option {% if b.getBank == "298" %} selected="selected" {% endif %}
+                                                    value="298"> 298-Vip's
+                                                Corretora de Câmbio Ltda.
+                                            </option>
+                                            <option {% if b.getBank == "296" %} selected="selected" {% endif %}
+                                                    value="296"> 296-VISION
+                                                S.A. CORRETORA DE CAMBIO
+                                            </option>
+                                            <option {% if b.getBank == "367" %} selected="selected" {% endif %}
+                                                    value="367"> 367-VITREO
+                                                DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS S.A.
+                                            </option>
+                                            <option {% if b.getBank == "310" %} selected="selected" {% endif %}
+                                                    value="310"> 310-VORTX
+                                                DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.
+                                            </option>
+                                            <option {% if b.getBank == "102" %} selected="selected" {% endif %}
+                                                    value="102"> 102-XP
+                                                INVESTIMENTOS CORRETORA DE CÂMBIO,TÍTULOS E VALORES MOBILIÁRIOS S/A
+                                            </option>
+                                            <option {% if b.getBank == "325" %} selected="selected" {% endif %}
+                                                    value="325"> 325-Órama
+                                                Distribuidora de Títulos e Valores Mobiliários S.A.
+                                            </option>
+                                            <option {% if b.getBank == "355" %} selected="selected" {% endif %}
+                                                    value="355"> 355-ÓTIMO
+                                                SOCIEDADE DE CRÉDITO DIRETO S.A.
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="inputPassword4">Agência/Digito</label>
+                                        <input readonly value="{{ b.agency }}" type="text" class="form-control"
+                                               name="banks[{{ b.getHash }}][agency]">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="inputPassword4">Conta/Digito</label>
+                                        <input readonly value="{{ b.account }}" type="text" class="form-control"
+                                               name="banks[{{ b.getHash }}][account]">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label>Observações</label>
+                                        <textarea readonly type="text" class="form-control"
+                                                  name="banks[{{ b.getHash }}][observation]"
+                                                  rows="3">{{ b.getObservation }}</textarea>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <button hidden type="button" data-hash="{{ b.getHash }}"
+                                                class="btn-lg btn-danger button_delete_bank">Excluir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    {% endfor %}
+                {% endif %}
+                <fieldset class="form-fieldset fieldset_bank">
+                    <legend>Bancos</legend>
+                    <div class="form-row">
+                        <div class="form-group form-group-default col-md-8 form-group-default-select2">
+                            <label>Banco</label>
+                            <select disabled class="custom-select " name="banks[0][bank]">
+                                <option value="" disabled="" selected=""> -- Escolha --</option>
+                                <option value="332"> 332-Acesso Soluções de Pagamento S.A.</option>
+                                <option value="117"> 117-ADVANCED CORRETORA DE CÂMBIO LTDA</option>
+                                <option value="272"> 272-AGK CORRETORA DE CAMBIO S.A.</option>
+                                <option value="349"> 349-AMAGGI S.A. - CRÉDITO, FINANCIAMENTO E INVESTIMENTO</option>
+                                <option value="188"> 188-ATIVA INVESTIMENTOS S.A. CORRETORA DE TÍTULOS, CÂMBIO E VALORES
+                                </option>
+                                <option value="280"> 280-Avista S.A. Crédito, Financiamento e Investimento</option>
+                                <option value="080"> 080-B&T CORRETORA DE CAMBIO LTDA.</option>
+                                <option value="654"> 654-Banco A.J.Renner S.A.</option>
+                                <option value="246"> 246-Banco ABC Brasil S.A.</option>
+                                <option value="075"> 075-Banco ABN AMRO S.A.</option>
+                                <option value="121"> 121-Banco Agibank S.A.</option>
+                                <option value="025"> 025-Banco Alfa S.A.</option>
+                                <option value="065"> 065-Banco Andbank (Brasil) S.A.</option>
+                                <option value="213"> 213-Banco Arbi S.A.</option>
+                                <option value="096"> 096-Banco B3 S.A.</option>
+                                <option value="024"> 024-Banco BANDEPE S.A.</option>
+                                <option value="330"> 330-Banco Bari de Investimentos e Financiamentos S/A</option>
+                                <option value="318"> 318-Banco BMG S.A.</option>
+                                <option value="752"> 752-Banco BNP Paribas Brasil S.A.</option>
+                                <option value="107"> 107-Banco BOCOM BBM S.A.</option>
+                                <option value="063"> 063-Banco Bradescard S.A.</option>
+                                <option value="036"> 036-Banco Bradesco BBI S.A.</option>
+                                <option value="122"> 122-Banco Bradesco BERJ S.A.</option>
+                                <option value="394"> 394-Banco Bradesco Financiamentos S.A.</option>
+                                <option value="237"> 237-Banco Bradesco S.A.</option>
+                                <option value="218"> 218-Banco BS2 S.A.</option>
+                                <option value="208"> 208-Banco BTG Pactual S.A.</option>
+                                <option value="336"> 336-Banco C6 S.A.</option>
+                                <option value="473"> 473-Banco Caixa Geral - Brasil S.A.</option>
+                                <option value="412"> 412-Banco Capital S.A.</option>
+                                <option value="040"> 040-Banco Cargill S.A.</option>
+                                <option value="739"> 739-Banco Cetelem S.A.</option>
+                                <option value="233"> 233-Banco Cifra S.A.</option>
+                                <option value="745"> 745-Banco Citibank S.A.</option>
+                                <option value="241"> 241-Banco Clássico S.A.</option>
+                                <option value="756"> 756-Banco Cooperativo do Brasil S.A. - BANCOOB</option>
+                                <option value="748"> 748-Banco Cooperativo Sicredi S.A.</option>
+                                <option value="222"> 222-Banco Credit Agricole Brasil S.A.</option>
+                                <option value="505"> 505-Banco Credit Suisse (Brasil) S.A.</option>
+                                <option value="069"> 069-Banco Crefisa S.A.</option>
+                                <option value="266"> 266-Banco Cédula S.A.</option>
+                                <option value="003"> 003-Banco da Amazônia S.A.</option>
+                                <option value="083"> 083-Banco da China Brasil S.A.</option>
+                                <option value="707"> 707-Banco Daycoval S.A.</option>
+                                <option value="300"> 300-Banco de La Nacion Argentina</option>
+                                <option value="495"> 495-Banco de La Provincia de Buenos Aires</option>
+                                <option value="335"> 335-Banco Digio S.A.</option>
+                                <option value="001"> 001-Banco do Brasil S.A.</option>
+                                <option value="047"> 047-Banco do Estado de Sergipe S.A.</option>
+                                <option value="037"> 037-Banco do Estado do Pará S.A.</option>
+                                <option value="041"> 041-Banco do Estado do Rio Grande do Sul S.A.</option>
+                                <option value="004"> 004-Banco do Nordeste do Brasil S.A.</option>
+                                <option value="265"> 265-Banco Fator S.A.</option>
+                                <option value="224"> 224-Banco Fibra S.A.</option>
+                                <option value="626"> 626-Banco Ficsa S.A.</option>
+                                <option value="094"> 094-Banco Finaxis S.A.</option>
+                                <option value="612"> 612-Banco Guanabara S.A.</option>
+                                <option value="012"> 012-Banco Inbursa S.A.</option>
+                                <option value="604"> 604-Banco Industrial do Brasil S.A.</option>
+                                <option value="653"> 653-Banco Indusval S.A.</option>
+                                <option value="077"> 077-Banco Inter S.A.</option>
+                                <option value="249"> 249-Banco Investcred Unibanco S.A.</option>
+                                <option value="479"> 479-Banco ItauBank S.A</option>
+                                <option value="184"> 184-Banco Itaú BBA S.A.</option>
+                                <option value="029"> 029-Banco Itaú Consignado S.A.</option>
+                                <option value="376"> 376-Banco J. P. Morgan S.A.</option>
+                                <option value="074"> 074-Banco J. Safra S.A.</option>
+                                <option value="217"> 217-Banco John Deere S.A.</option>
+                                <option value="076"> 076-Banco KDB S.A.</option>
+                                <option value="757"> 757-Banco KEB HANA do Brasil S.A.</option>
+                                <option value="600"> 600-Banco Luso Brasileiro S.A.</option>
+                                <option value="389"> 389-Banco Mercantil do Brasil S.A.</option>
+                                <option value="370"> 370-Banco Mizuho do Brasil S.A.</option>
+                                <option value="746"> 746-Banco Modal S.A.</option>
+                                <option value="066"> 066-Banco Morgan Stanley S.A.</option>
+                                <option value="456"> 456-Banco MUFG Brasil S.A.</option>
+                                <option value="243"> 243-Banco Máxima S.A.</option>
+                                <option value="007"> 007-Banco Nacional de Desenvolvimento Econômico e Social - BNDES
+                                </option>
+                                <option value="169"> 169-Banco Olé Bonsucesso Consignado S.A.</option>
+                                <option value="079"> 079-Banco Original do Agronegócio S.A.</option>
+                                <option value="212"> 212-Banco Original S.A.</option>
+                                <option value="712"> 712-Banco Ourinvest S.A.</option>
+                                <option value="623"> 623-Banco PAN S.A.</option>
+                                <option value="611"> 611-Banco Paulista S.A.</option>
+                                <option value="643"> 643-Banco Pine S.A.</option>
+                                <option value="747"> 747-Banco Rabobank International Brasil S.A.</option>
+                                <option value="633"> 633-Banco Rendimento S.A.</option>
+                                <option value="741"> 741-Banco Ribeirão Preto S.A.</option>
+                                <option value="120"> 120-Banco Rodobens S.A.</option>
+                                <option value="422"> 422-Banco Safra S.A.</option>
+                                <option value="033"> 033-Banco Santander (Brasil) S.A.</option>
+                                <option value="743"> 743-Banco Semear S.A.</option>
+                                <option value="754"> 754-Banco Sistema S.A.</option>
+                                <option value="630"> 630-Banco Smartbank S.A.</option>
+                                <option value="366"> 366-Banco Société Générale Brasil S.A.</option>
+                                <option value="637"> 637-Banco Sofisa S.A.</option>
+                                <option value="464"> 464-Banco Sumitomo Mitsui Brasileiro S.A.</option>
+                                <option value="082"> 082-Banco Topázio S.A.</option>
+                                <option value="018"> 018-Banco Tricury S.A.</option>
+                                <option value="634"> 634-Banco Triângulo S.A.</option>
+                                <option value="655"> 655-Banco Votorantim S.A.</option>
+                                <option value="610"> 610-Banco VR S.A.</option>
+                                <option value="119"> 119-Banco Western Union do Brasil S.A.</option>
+                                <option value="124"> 124-Banco Woori Bank do Brasil S.A.</option>
+                                <option value="348"> 348-Banco XP S.A.</option>
+                                <option value="081"> 081-BancoSeguro S.A.</option>
+                                <option value="021"> 021-BANESTES S.A. Banco do Estado do Espírito Santo</option>
+                                <option value="755"> 755-Bank of America Merrill Lynch Banco Múltiplo S.A.</option>
+                                <option value="268"> 268-BARI COMPANHIA HIPOTECÁRIA</option>
+                                <option value="250"> 250-BCV - Banco de Crédito e Varejo S.A.</option>
+                                <option value="144"> 144-BEXS Banco de Câmbio S.A.</option>
+                                <option value="253"> 253-Bexs Corretora de Câmbio S/A</option>
+                                <option value="134"> 134-BGC LIQUIDEZ DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS
+                                    LTDA
+                                </option>
+                                <option value="017"> 017-BNY Mellon Banco S.A.</option>
+                                <option value="301"> 301-BPP Instituição de Pagamento S.A.</option>
+                                <option value="126"> 126-BR Partners Banco de Investimento S.A.</option>
+                                <option value="070"> 070-BRB - Banco de Brasília S.A.</option>
+                                <option value="092"> 092-Brickell S.A. Crédito</option>
+                                <option value="173"> 173-BRL Trust Distribuidora de Títulos e Valores Mobiliários S.A.
+                                </option>
+                                <option value="142"> 142-Broker Brasil Corretora de Câmbio Ltda.</option>
+                                <option value="292"> 292-BS2 Distribuidora de Títulos e Valores Mobiliários S.A.
+                                </option>
+                                <option value="104"> 104-Caixa Econômica Federal</option>
+                                <option value="309"> 309-CAMBIONET CORRETORA DE CÂMBIO LTDA.</option>
+                                <option value="288"> 288-CAROL DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.
+                                </option>
+                                <option value="130"> 130-CARUANA S.A. - SOCIEDADE DE CRÉDITO, FINANCIAMENTO E
+                                    INVESTIMENTO
+                                </option>
+                                <option value="159"> 159-Casa do Crédito S.A. Sociedade de Crédito ao
+                                    Microempreendedor
+                                </option>
+                                <option value="114"> 114-Central Cooperativa de Crédito no Estado do Espírito Santo -
+                                    CECOOP
+                                </option>
+                                <option value="091"> 091-CENTRAL DE COOPERATIVAS DE ECONOMIA E CRÉDITO MÚTUO DO ESTADO
+                                    DO RIO
+                                    GRANDE DO S
+                                </option>
+                                <option value="320"> 320-China Construction Bank (Brasil) Banco Múltiplo S.A.</option>
+                                <option value="477"> 477-Citibank N.A.</option>
+                                <option value="180"> 180-CM CAPITAL MARKETS CORRETORA DE CÂMBIO, TÍTULOS E VALORES
+                                    MOBILIÁRIOS
+                                    LTDA
+                                </option>
+                                <option value="127"> 127-Codepe Corretora de Valores e Câmbio S.A.</option>
+                                <option value="163"> 163-Commerzbank Brasil S.A. - Banco Múltiplo</option>
+                                <option value="133"> 133-CONFEDERAÇÃO NACIONAL DAS COOPERATIVAS CENTRAIS DE CRÉDITO E
+                                    ECONOMIA
+                                    FAMILIAR E
+                                </option>
+                                <option value="136"> 136-CONFEDERAÇÃO NACIONAL DAS COOPERATIVAS CENTRAIS UNICRED LTDA. -
+                                    UNICRED
+                                    DO BRASI
+                                </option>
+                                <option value="060"> 060-Confidence Corretora de Câmbio S.A.</option>
+                                <option value="085"> 085-Cooperativa Central de Crédito - AILOS</option>
+                                <option value="097"> 097-Cooperativa Central de Crédito Noroeste Brasileiro Ltda.
+                                </option>
+                                <option value="279"> 279-COOPERATIVA DE CREDITO RURAL DE PRIMAVERA DO LESTE</option>
+                                <option value="016"> 016-COOPERATIVA DE CRÉDITO MÚTUO DOS DESPACHANTES DE TRÂNSITO DE
+                                    SANTA
+                                    CATARINA E RI
+                                </option>
+                                <option value="281"> 281-Cooperativa de Crédito Rural Coopavel</option>
+                                <option value="322"> 322-Cooperativa de Crédito Rural de Abelardo Luz -
+                                    Sulcredi/Crediluz
+                                </option>
+                                <option value="286"> 286-COOPERATIVA DE CRÉDITO RURAL DE OURO SULCREDI/OURO</option>
+                                <option value="273"> 273-Cooperativa de Crédito Rural de São Miguel do Oeste -
+                                    Sulcredi/São
+                                    Miguel
+                                </option>
+                                <option value="098"> 098-Credialiança Cooperativa de Crédito Rural</option>
+                                <option value="010"> 010-CREDICOAMO CREDITO RURAL COOPERATIVA</option>
+                                <option value="089"> 089-CREDISAN COOPERATIVA DE CRÉDITO</option>
+                                <option value="011"> 011-CREDIT SUISSE HEDGING-GRIFFO CORRETORA DE VALORES S.A</option>
+                                <option value="342"> 342-Creditas Sociedade de Crédito Direto S.A.</option>
+                                <option value="321"> 321-CREFAZ SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E A EMPRESA DE
+                                    PEQUENO
+                                    PORTE LT
+                                </option>
+                                <option value="289"> 289-DECYSEO CORRETORA DE CAMBIO LTDA.</option>
+                                <option value="487"> 487-Deutsche Bank S.A. - Banco Alemão</option>
+                                <option value="140"> 140-Easynvest - Título Corretora de Valores SA</option>
+                                <option value="149"> 149-Facta Financeira S.A. - Crédito Financiamento e Investimento
+                                </option>
+                                <option value="196"> 196-FAIR CORRETORA DE CAMBIO S.A.</option>
+                                <option value="343"> 343-FFA SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À EMPRESA DE
+                                    PEQUENO
+                                    PORTE LTDA.
+                                </option>
+                                <option value="331"> 331-Fram Capital Distribuidora de Títulos e Valores Mobiliários
+                                    S.A.
+                                </option>
+                                <option value="285"> 285-Frente Corretora de Câmbio Ltda.</option>
+                                <option value="278"> 278-Genial Investimentos Corretora de Valores Mobiliários S.A.
+                                </option>
+                                <option value="364"> 364-GERENCIANET PAGAMENTOS DO BRASIL LTDA</option>
+                                <option value="138"> 138-Get Money Corretora de Câmbio S.A.</option>
+                                <option value="064"> 064-Goldman Sachs do Brasil Banco Múltiplo S.A.</option>
+                                <option value="177"> 177-Guide Investimentos S.A. Corretora de Valores</option>
+                                <option value="146"> 146-GUITTA CORRETORA DE CAMBIO LTDA.</option>
+                                <option value="078"> 078-Haitong Banco de Investimento do Brasil S.A.</option>
+                                <option value="062"> 062-Hipercard Banco Múltiplo S.A.</option>
+                                <option value="189"> 189-HS FINANCEIRA S/A CREDITO, FINANCIAMENTO E INVESTIMENTOS
+                                </option>
+                                <option value="269"> 269-HSBC Brasil S.A. - Banco de Investimento</option>
+                                <option value="271"> 271-IB Corretora de Câmbio, Títulos e Valores Mobiliários S.A.
+                                </option>
+                                <option value="157"> 157-ICAP do Brasil Corretora de Títulos e Valores Mobiliários Ltda.
+                                </option>
+                                <option value="132"> 132-ICBC do Brasil Banco Múltiplo S.A.</option>
+                                <option value="492"> 492-ING Bank N.V.</option>
+                                <option value="139"> 139-Intesa Sanpaolo Brasil S.A. - Banco Múltiplo</option>
+                                <option value="652"> 652-Itaú Unibanco Holding S.A.</option>
+                                <option value="341"> 341-Itaú Unibanco S.A.</option>
+                                <option value="488"> 488-JPMorgan Chase Bank</option>
+                                <option value="399"> 399-Kirton Bank S.A. - Banco Múltiplo</option>
+                                <option value="293"> 293-Lastro RDV Distribuidora de Títulos e Valores Mobiliários Ltda.
+                                </option>
+                                <option value="105"> 105-Lecca Crédito, Financiamento e Investimento S/A</option>
+                                <option value="145"> 145-LEVYCAM - CORRETORA DE CAMBIO E VALORES LTDA.</option>
+                                <option value="113"> 113-Magliano S.A. Corretora de Cambio e Valores Mobiliarios
+                                </option>
+                                <option value="323"> 323-MERCADOPAGO.COM REPRESENTACOES LTDA.</option>
+                                <option value="274"> 274-MONEY PLUS SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E A
+                                    EMPRESA DE
+                                    PEQUENO PORT
+                                </option>
+                                <option value="259"> 259-MONEYCORP BANCO DE CÂMBIO S.A.</option>
+                                <option value="128"> 128-MS Bank S.A. Banco de Câmbio</option>
+                                <option value="354"> 354-NECTON INVESTIMENTOS S.A. CORRETORA DE VALORES MOBILIÁRIOS E
+                                    COMMODITIES
+                                </option>
+                                <option value="191"> 191-Nova Futura Corretora de Títulos e Valores Mobiliários Ltda.
+                                </option>
+                                <option value="753"> 753-Novo Banco Continental S.A. - Banco Múltiplo</option>
+                                <option value="260"> 260-Nu Pagamentos S.A.</option>
+                                <option value="111"> 111-OLIVEIRA TRUST DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIARIOS
+                                    S.A.
+                                </option>
+                                <option value="319"> 319-OM DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA</option>
+                                <option value="613"> 613-Omni Banco S.A.</option>
+                                <option value="290"> 290-Pagseguro Internet S.A.</option>
+                                <option value="254"> 254-Paraná Banco S.A.</option>
+                                <option value="326"> 326-PARATI - CREDITO, FINANCIAMENTO E INVESTIMENTO S.A.</option>
+                                <option value="194"> 194-PARMETAL DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA
+                                </option>
+                                <option value="174"> 174-PERNAMBUCANAS FINANCIADORA S.A. - CRÉDITO, FINANCIAMENTO E
+                                    INVESTIMENTO
+                                </option>
+                                <option value="315"> 315-PI Distribuidora de Títulos e Valores Mobiliários S.A.</option>
+                                <option value="100"> 100-Planner Corretora de Valores S.A.</option>
+                                <option value="125"> 125-Plural S.A. - Banco Múltiplo</option>
+                                <option value="108"> 108-PORTOCRED S.A. - CREDITO, FINANCIAMENTO E INVESTIMENTO</option>
+                                <option value="306"> 306-PORTOPAR DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.
+                                </option>
+                                <option value="093"> 093-PÓLOCRED SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À EMPRESA
+                                    DE
+                                    PEQUENO PORT
+                                </option>
+                                <option value="329"> 329-QI Sociedade de Crédito Direto S.A.</option>
+                                <option value="283"> 283-RB CAPITAL INVESTIMENTOS DISTRIBUIDORA DE TÍTULOS E VALORES
+                                    MOBILIÁRIOS
+                                    LIMITADA
+                                </option>
+                                <option value="101"> 101-RENASCENCA DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS
+                                    LTDA
+                                </option>
+                                <option value="270"> 270-Sagitur Corretora de Câmbio Ltda.</option>
+                                <option value="751"> 751-Scotiabank Brasil S.A. Banco Múltiplo</option>
+                                <option value="276"> 276-Senff S.A. - Crédito, Financiamento e Investimento</option>
+                                <option value="545"> 545-SENSO CORRETORA DE CAMBIO E VALORES MOBILIARIOS S.A</option>
+                                <option value="190"> 190-SERVICOOP - COOPERATIVA DE CRÉDITO DOS SERVIDORES PÚBLICOS
+                                    ESTADUAIS DO
+                                    RIO GRAN
+                                </option>
+                                <option value="183"> 183-SOCRED S.A. - SOCIEDADE DE CRÉDITO AO MICROEMPREENDEDOR E À
+                                    EMPRESA DE
+                                    PEQUENO P
+                                </option>
+                                <option value="365"> 365-SOLIDUS S.A. CORRETORA DE CAMBIO E VALORES MOBILIARIOS</option>
+                                <option value="299"> 299-SOROCRED CRÉDITO, FINANCIAMENTO E INVESTIMENTO S.A.</option>
+                                <option value="014"> 014-State Street Brasil S.A. - Banco Comercial</option>
+                                <option value="197"> 197-Stone Pagamentos S.A.</option>
+                                <option value="340"> 340-Super Pagamentos e Administração de Meios Eletrônicos S.A.
+                                </option>
+                                <option value="307"> 307-Terra Investimentos Distribuidora de Títulos e Valores
+                                    Mobiliários
+                                    Ltda.
+                                </option>
+                                <option value="352"> 352-TORO CORRETORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA</option>
+                                <option value="095"> 095-Travelex Banco de Câmbio S.A.</option>
+                                <option value="143"> 143-Treviso Corretora de Câmbio S.A.</option>
+                                <option value="131"> 131-TULLETT PREBON BRASIL CORRETORA DE VALORES E CÂMBIO LTDA
+                                </option>
+                                <option value="129"> 129-UBS Brasil Banco de Investimento S.A.</option>
+                                <option value="015"> 015-UBS Brasil Corretora de Câmbio, Títulos e Valores Mobiliários
+                                    S.A.
+                                </option>
+                                <option value="099"> 099-UNIPRIME CENTRAL - CENTRAL INTERESTADUAL DE COOPERATIVAS DE
+                                    CREDITO
+                                    LTDA.
+                                </option>
+                                <option value="084"> 084-Uniprime Norte do Paraná - Coop de Economia e Crédito Mútuo dos
+                                    Médicos
+                                </option>
+                                <option value="373"> 373-UP.P SOCIEDADE DE EMPRÉSTIMO ENTRE PESSOAS S.A.</option>
+                                <option value="298"> 298-Vip's Corretora de Câmbio Ltda.</option>
+                                <option value="296"> 296-VISION S.A. CORRETORA DE CAMBIO</option>
+                                <option value="367"> 367-VITREO DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS S.A.
+                                </option>
+                                <option value="310"> 310-VORTX DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS LTDA.
+                                </option>
+                                <option value="102"> 102-XP INVESTIMENTOS CORRETORA DE CÂMBIO,TÍTULOS E VALORES
+                                    MOBILIÁRIOS
+                                    S/A
+                                </option>
+                                <option value="325"> 325-Órama Distribuidora de Títulos e Valores Mobiliários S.A.
+                                </option>
+                                <option value="355"> 355-ÓTIMO SOCIEDADE DE CRÉDITO DIRETO S.A.</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Agência/Digito</label>
+                            <input readonly type="text" class="form-control" name="banks[0][agency]">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Conta/Digito</label>
+                            <input readonly type="text" class="form-control" name="banks[0][account]">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Observações</label>
+                            <textarea readonly type="text" class="form-control" name="banks[0][observation]"
+                                      rows="2"></textarea>
+                        </div>
+                    </div>
+                    <br>
+                </fieldset>
+                <br>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <button hidden type="button" class="btn btn-sm btn-info btn_fieldset_contact">Contato</button>
+                    </div>
+                </div>
+                {% if contacts|length > 0 %}
+                    {% for c in contacts %}
+                        <fieldset class="form-fieldset" id="{{ c.getHash }}">
+                            <legend>Contatos</legend>
+                            <div>
+                                <div class="form-row contact-type" id="contact_type_existed">
+                                    <div class="form-group col-md-3">
+                                        <label>Tipo</label>
+                                        <select disabled name="contacts[{{ c.getHash }}][type]"
+                                                class="custom-select select-type"
+                                                id="select_type_existed">
+                                            <option {% if c.getType == 1 %} selected="selected" {% endif %} value="1">
+                                                E-mail
+                                            </option>
+                                            <option {% if c.getType == 2 %} selected="selected" {% endif %} value="2">
+                                                Telefone
+                                            </option>
+                                            <option {% if c.getType == 3 %} selected="selected" {% endif %} value="3">
+                                                Celular
+                                            </option>
+                                            <option {% if c.getType == 4 %} selected="selected" {% endif %} value="4">
+                                                Celular/WhatsApp
+                                            </option>
+                                            <option {% if c.getType == 5 %} selected="selected" {% endif %} value="5">
+                                                FAX
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Contato</label>
+                                        <input readonly value="{{ c.getContact }}"
+                                               name="contacts[{{ c.getHash }}][contact]" class="form-control contact"
+                                               placeholder="Telefone ou E-mail" id="contact_existed">
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label> - </label>
+                                        <select disabled name="contacts[{{ c.getHash }}][building_type]"
+                                                class="custom-select">
+                                            <option {% if c.getBuildingType == 1 %} selected="selected" {% endif %}
+                                                    value="1">
+                                                Pessoal
+                                            </option>
+                                            <option {% if c.getBuildingType == 2 %} selected="selected" {% endif %}
+                                                    value="2">
+                                                Profissional
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <input readonly
+                                               name="address[{{ c.hash }}][preferential]" {% if c.getPreferential %} checked {% endif %}
+                                               type="checkbox">
+                                        <label>Contato Preferencial</label>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <button hidden type="button" data-hash="{{ c.getHash }}"
+                                                class="btn-lg btn-danger button_delete_contact">Excluir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    {% endfor %}
+                {% endif %}
+                <fieldset class="form-fieldset fieldset_contact">
+                    <legend>Contatos</legend>
+                    <div class="form-row" id="contact_type">
+                        <div class="form-group col-md-3">
+                            <label>Tipo</label>
+                            <select disabled id="select_type" name="contacts[0][type]" class="custom-select">
+                                <option value="1">E-mail</option>
+                                <option value="2">Telefone</option>
+                                <option value="3">Celular</option>
+                                <option value="4">Celular/WhatsApp</option>
+                                <option value="5">FAX</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Contato</label>
+                            <input readonly name="contacts[0][contact]" class="form-control"
+                                   placeholder="Telefone ou E-mail" id="contact">
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label> - </label>
+                            <select disabled name="contacts[0][building_type]" class="custom-select">
+                                <option value="1">Pessoal</option>
+                                <option value="2">Profissional</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <input readonly name="contacts[0][preferential]" type="checkbox">
+                                <label>Contato Preferencial</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <button hidden type="button" class="btn btn-sm btn-info btn_fieldset_address">Endereço</button>
+                    </div>
+                </div>
+                {% if address is iterable and address|length > 0 %}
+                    {% for a in address %}
+                        <fieldset class="form-fieldset" id="{{ a.getHash }}">
+                            <legend>Endereços</legend>
+                            <div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="inputPassword4">CEP</label>
+                                        <input readonly value="{{ a.getZip }}" name="address[{{ a.getHash }}][zip]"
+                                               type="cep"
+                                               class="form-control input-zip"
+                                               data-mask="00000-000"
+                                        >
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="inputPassword4">Número</label>
+                                        <input readonly value="{{ a.getNumber }}"
+                                               name="address[{{ a.getHash }}][number]" type="text"
+                                               class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="inputPassword4">Complemento</label>
+                                        <input readonly value="{{ a.getComplement }}"
+                                               name="address[{{ a.getHash }}][complement]" type="text"
+                                               class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="inputEmail4">Tipo</label>
+                                        <select disabled name="address[{{ a.getHash }}][address_type]"
+                                                class="custom-select">
+                                            <option {% if a.getAddressType == null %} selected="selected" {% endif %}
+                                                    value=""
+                                                    disabled=""
+                                                    selected=""> --
+                                                Escolha --
+                                            </option>
+                                            <option {% if a.getAddressType == 1 %} selected="selected" {% endif %}
+                                                    value="1">
+                                                Residencial
+                                            </option>
+                                            <option {% if a.getAddressType == 2 %} selected="selected" {% endif %}
+                                                    value="2">Comercial
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="inputEmail4">Endereço</label>
+                                        <input readonly value="{{ a.getAddress }}"
+                                               name="address[{{ a.getHash }}][address]" type="text"
+                                               class="form-control input-address">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="inputEmail4">Bairro</label>
+                                        <input readonly value="{{ a.getDistrict }}"
+                                               name="address[{{ a.getHash }}][district]" type="text"
+                                               class="form-control input-district">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputPassword4">Cidade</label>
+                                        <input readonly value="{{ a.getCity }}" name="address[{{ a.getHash }}][city]"
+                                               type="text"
+                                               class="form-control input-city">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputPassword4">UF</label>
+                                        <input readonly value="{{ a.getState }}" name="address[{{ a.getHash }}][state]"
+                                               type="text"
+                                               class="form-control input-state">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <input readonly
+                                               name="address[{{ a.hash }}][preferential]" {% if a.getPreferential %} checked {% endif %}
+                                               type="checkbox">
+                                        <label>Endereço Preferencial</label>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <button hidden type="button" data-hash="{{ a.getHash }}"
+                                                class="btn-lg btn-danger button_delete_address">Excluir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </fieldset>
+                    {% endfor %}
+                {% endif %}
+
+                <br>
+                <fieldset class="form-fieldset fieldset_address">
+                    <legend>Endereços</legend>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>CEP</label>
+                            <input readonly name="address[0][zip]" type="cep" class="form-control input-zip"
+                                   data-mask="00000-000">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Número</label>
+                            <input readonly name="address[0][number]" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Complemento</label>
+                            <input readonly name="address[0][complement]" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Tipo</label>
+                            <select disabled name="address[0][address_type]" class="custom-select">
+                                <option value="" disabled="" selected=""> -- Escolha --</option>
+                                <option value="1">Residencial</option>
+                                <option value="2">Comercial</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Endereço</label>
+                            <input readonly name="address[0][address]" type="text" class="form-control input-address">
+                        </div>
+                        <div class="form-group col-md-12">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>Bairro</label>
+                            <input readonly name="address[0][district]" type="text" class="form-control input-district">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Cidade</label>
+                            <input readonly name="address[0][city]" type="text" class="form-control input-city">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>UF</label>
+                            <input readonly name="address[0][state]" type="text" class="form-control input-state">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input readonly name="address[0][preferential]" type="checkbox">
+                        <label>Endereço Preferencial</label>
+                    </div>
+                </fieldset>
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <button hidden type="button" class="btn btn-sm btn-info btn_fieldset_cards">+ Cartões</button>
+                    </div>
+                </div>
+                {% if cards is iterable and cards|length > 0 %}
+                    {% for card in cards %}
+                        <fieldset class="form-fieldset" id="{{ card.getHash }}">
+                            <legend>Cartões</legend>
+                            <div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="inputTitleName">Nome Titular</label>
+                                        <input readonly value="{{ card.getTitleName }}"
+                                               name="cards[{{ card.getHash }}][title_name]" type="text"
+                                               class="form-control"
+                                        >
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="inputNumber">Número</label>
+                                        <input readonly value="{{ card.getNumber }}"
+                                               name="cards[{{ card.getHash }}][number]" type="text"
+                                               class="form-control">
+                                    </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputDueDate">Complemento</label>
+                                            <input readonly value="{{ card.getDueDate|date("m/Y") }}"
+                                                   name="cards[{{ card.getHash }}][due_date]" type="text"
+                                                   class="form-control">
+                                        </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label>Observações</label>
+                                        <textarea type="text" class="form-control"
+                                                  name="cards[{{ card.getHash }}][observation]" rows="2">{{ card.getObservation }}
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <button hidden type="button" data-hash="{{ card.getHash }}"
+                                                class="btn-lg btn-danger button_delete_card">Excluir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </fieldset>
+                    {% endfor %}
+                {% endif %}
+
+                <br>
+                <fieldset class="form-fieldset fieldset_address">
+                    <legend>Cartões</legend>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            <label>Nome Titular</label>
+                            <input readonly name="cards[0][title_name]" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Número</label>
+                            <input readonly name="cards[0][number]" type="text" data-mask="0000 0000 0000 0000"
+                                   class="form-control">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Data de Vencimento</label>
+                            <input readonly name="cards[0][due_date]" type="text" data-mask="00/0000"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Observações</label>
+                            <textarea type="text" class="form-control" name="cards[0][observation]" rows="2"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <br>
+                <br>
+                <div class="file-loading">
+                    <input id="kv-explorer" type="file" multiple>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        <button hidden class="btn btn-lg btn-primary">Salvar Cliente</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+        <div class="tab-pane fade" id="proposals" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                <div>
+                    <h4 class="mg-b-0 tx-spacing--1">Lista de Propostas</h4>
+                </div>
+                <div class="">
+                    <a href="{{ url_for('proposal.form', {'hash_customer' : customer.hash}) }}" type="button"
+                       class="btn btn-lg btn-primary">Cadastrar Uma Nova
+                        Proposta</a>
+                </div>
+            </div>
+            <div data-label="Example" class="df-example demo-table">
+                <table id="list" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="wd-15p">Placa</th>
+                        <th class="wd-15p">Chassi</th>
+                        <th class="wd-20p">Seguradora</th>
+                        <th class="wd-15p">Data Cadastro</th>
+                        <th>Zero KM</th>
+
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in customer.proposals %}
+                        <tr>
+                            <td scope="row">{{ p.plate }}</td>
+                            <td scope="row">{{ p.chassis }}</td>
+                            <td scope="row">{{ p.safeCompany.insurer }}</td>
+                            <td scope="row">{{ p.createdAt|date("d/m/Y") }}</td>
+                            <td scope="row">{{ p.vehicleState == 0 ? "Novo" : "Usado" }}</td>
+
+                            <td scope="row"><a class="btn btn-sm btn-primary"
+                                               href="{{ url_for('proposal.get', {'hash_proposal' : p.hash}) }}">
+                                    Visualizar </a></td>
+
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="7" class="valign-middle-f"> Nenhum registro encontrado</td>
+                            <td></td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="policies" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                <div>
+                    <h4 class="mg-b-0 tx-spacing--1">Lista de Apólices</h4>
+                </div>
+                <div class="">
+                    <a href="{{ url_for('policy.form', {'hash_customer' : customer.hash}) }}" type="button"
+                       class="btn btn-lg btn-primary">Cadastrar Uma Nova
+                        Apólice</a>
+                </div>
+            </div>
+            <div data-label="Example" class="df-example demo-table">
+                <table id="list" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="wd-15p">Placa</th>
+                        <th class="wd-15p">Chassi</th>
+                        <th class="wd-15p">Apólice</th>
+                        <th class="wd-20p">Seguradora</th>
+                        <th class="wd-15p">Data Cadastro</th>
+                        <th></th>
+
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in customer.policies %}
+                        <tr>
+                            <td scope="row">{{ p.plate }}</td>
+                            <td scope="row">{{ p.chassis }}</td>
+                            <td scope="row">{{ p.policyNumber }}</td>
+                            <td scope="row">{{ p.safeCompany.insurer }}</td>
+                            <td scope="row">{{ p.createdAt|date("d/m/Y") }}</td>
+                            <td></td>
+
+                            <td scope="row"><a class="btn btn-sm btn-primary"
+                                               href="{{ url_for('policy.put', {'hash_policy' : p.hash}) }}">
+                                    Visualizar </a>
+                            </td>
+
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="7" class="valign-middle-f"> Nenhum registro encontrado</td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="claims" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                <div>
+                    <h4 class="mg-b-0 tx-spacing--1">Lista de Sinistros</h4>
+                </div>
+                <div class="">
+                    <a href="{{ url_for('claim.form', {'hash_customer' : customer.hash}) }}" type="button"
+                       class="btn btn-lg btn-primary">Cadastrar Um Novo
+                        Sinistro</a>
+                </div>
+            </div>
+            <div data-label="Example" class="df-example demo-table">
+                <table id="list" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="wd-15p">Código</th>
+                        <th class="wd-15p">Apólice</th>
+                        <th class="wd-20p">Vencimento</th>
+                        <th class="wd-15p">Data Cadastro</th>
+                        <th class="wd-15p">Atualizada Em</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for c in customer.insuranceClaims %}
+                        <tr>
+                            <td scope="row">{{ c.id }}</td>
+                            <td scope="row">{{ c.policy.policyNumber }}</td>
+                            <td scope="row">{{ c.policy.policyDate|date("d/m/Y") }}</td>
+                            <td scope="row">{{ c.createdAt|date("d/m/Y") }}</td>
+                            <td scope="row">{{ c.updatedAt|date("d/m/Y") }}</td>
+                            <td scope="row"><a class="btn btn-sm btn-primary"
+                                               href="{{ url_for('claim.get', {'hash_claim' : c.hash}) }}">
+                                    Visualizar </a>
+                            <td></td>
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="7" class="valign-middle-f"> Nenhum registro encontrado</td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block header %}
+    <link href="/template/v1/lib/select2/css/select2.min.css" rel="stylesheet" type="text/css"
+          media="screen"/>
+{% endblock %}
+
+{% block footer %}
+    <script src="/template/v1/lib/jquery-validation/js/jquery.validate.js"></script>
+    <script src="/template/v1/lib/jquery-validation/js/localization/messages_pt_BR.js"></script>
+    <script src="/wt2/js/terminadedigitar.js"></script>
+    <script src="/wt2/js/cep.js"></script>
+    <script src="/wt2/js/cpf.js"></script>
+    <script src="/wt2/js/contact.js"></script>
+    <script src="/wt2/js/editForm.js"></script>
+    <script src="/template/v1/lib/select2/js/select2.full.min.js"></script>
+    <script src="/wt2/js/system.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+    <script>
+
+        $("#contact_type").on('change', '#select_type', function () {
+            addMaskToInput();
+        });
+
+        function addMaskToInput() {
+            let $select_type = $('#select_type option:selected').val();
+            let $contact = $('#contact');
+            if ($select_type !== '1') {
+                $contact.mask('(00)00000-0000');
+            } else {
+                $contact.unmask();
+            }
+        }
+
+
+        $("#contact_type_existed").on('change', '#select_type_existed', function () {
+            addMaskToInputExisted();
+        });
+
+        function addMaskToInputExisted() {
+            let $contact_existed = $('#contact_existed');
+            let $select_type_existed = $('#select_type_existed option:selected').val();
+
+            if ($select_type_existed !== '1') {
+                $contact_existed.mask('(00)00000-0000');
+            } else {
+                $contact_existed.unmask();
+            }
+        }
+
+
+        $(function () {
+            $(':input[name=document]').mask(docMask, docOptions);
+        });
+
+        let docMask = function (val) {
+                return val.replace(/\D/g, '').length <= 11 ? '000.000.000-009' : '00.000.000/0000-00';
+            },
+            docOptions = {
+                onKeyPress: function (val, e, field, options) {
+                    field.mask(docMask.apply({}, arguments), options);
+                }
+            };
+
+        $(function () {
+            $(':input[name=document]').mask(docMask, docOptions);
+        });
+
+
+        $(document).ready(function () {
+            $('.select2-test').select2();
+
+            $('.fieldset_bank').metalClone({
+                btnClone: '.btn_fieldset_bank',
+                btnRemoveClass: 'btn btn-danger btn-sm',
+                confirmMessageText: 'Deseja mesmo apagar?',
+                onComplete: function (e, o, c) {
+                    let cc = 0;
+                    $('.fieldset_bank').each(function (i) {
+                        cc = eval(cc + 1);
+                    })
+                    $(c[0]).find(':input').each(function (ee) {
+                        if ($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                    })
+                }
+            });
+
+            $('.fieldset_contact').metalClone({
+                btnClone: '.btn_fieldset_contact',
+                btnRemoveClass: 'btn btn-danger btn-sm',
+                confirmMessageText: 'Deseja mesmo apagar?',
+                onComplete: function (e, o, c) {
+                    let cc = 0;
+                    $('.fieldset_contact').each(function (i) {
+                        cc = eval(cc + 1);
+                    })
+                    $(c[0]).find(':input').each(function (ee) {
+                        if ($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                    })
+                }
+            });
+
+            $('.fieldset_address').metalClone({
+                btnClone: '.btn_fieldset_address',
+                btnRemoveClass: 'btn btn-danger btn-sm',
+                confirmMessageText: 'Deseja mesmo apagar?',
+                onComplete: function (e, o, c) {
+                    let cc = 0;
+                    $('.fieldset_address').each(function (i) {
+                        cc = eval(cc + 1);
+                    })
+                    $(c[0]).find(':input').each(function (ee) {
+                        if ($(this).attr('name')) $(this).attr('name', $(this).attr('name').replace(0, cc));
+                    })
+                }
+            });
+
+            const footerTemplate = '<div class="file-thumbnail-footer" style ="height:94px">\n' +
+                '  <input id="{document_id}" class="kv-input kv-new form-control input-sm form-control-sm text-center {TAG_CSS_NEW}" ' +
+                'value="{caption}" name="title[{document_id}]" placeholder="Enter caption...">\n' +
+                '   <div class="small" style="margin:15px 0 2px 0">{size}</div> {progress}\n{indicator}\n{actions}\n' +
+                '</div>';
+
+
+            $("#kv-explorer").fileinput({
+                initialPreview: {{ preview|raw }},
+                initialPreviewConfig: {{ previewConfig|raw }},
+                layoutTemplates: {footer: footerTemplate},
+                allowedPreviewTypes: ['image', 'pdf', 'video'],
+                'theme': 'fas',
+                'uploadUrl': "{{ url_for('upload.customer', {hash: customer.hash} ) }}",
+                'deleteUrl': "{{ url_for('file.delete', {type: 'customer'}) }}",
+                previewFileIcon: '<i class="fas fa-file"></i>',
+                previewFileIconSettings: {
+                    'docx': '<i class="fas fa-file-word text-primary"></i>'
+                },
+                initialPreviewThumbTags: {{ initialPreviewThumbTags|raw }},
+                language: 'pt-BR',
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+
+            });
+
+            $(".button_delete_bank").click(function () {
+                const hash = $('#' + $(this).data('hash'));
+                Swal.fire({
+                    title: 'Deseja mesmo excluir?',
+                    text: "Não poderá retornar a execução.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sim, quero excluir!',
+                    cancelButtonText: 'Cancelar',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        return fetch($.ajax({
+                            url: '/system/customer/bank/' + hash[0].id,
+                            method: 'DELETE',
+                            success: function (data) {
+                                if (data) {
+                                    alert('Banco excluído')
+                                }
+                            }
+                        })).then(response => {
+                            hash.remove();
+                            location.reload(false)
+                        }).catch(error => {
+                            location.reload(false)
+                        })
+
+                    }
+                });
+            });
+
+            $(".button_delete_contact").click(function () {
+                const hash = $('#' + $(this).data('hash'));
+                Swal.fire({
+                    title: 'Deseja mesmo excluir?',
+                    text: "Não poderá retornar a execução.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sim, quero excluir!',
+                    cancelButtonText: 'Cancelar',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        return fetch($.ajax({
+                            url: '/system/customer/contact/' + hash[0].id,
+                            method: 'DELETE',
+                            success: function (data) {
+                                if (data) {
+                                    alert('Contato excluído')
+                                }
+                            }
+                        })).then(response => {
+                            hash.remove();
+                            location.reload(false)
+                        }).catch(error => {
+                            location.reload(false)
+                        })
+
+                    }
+                });
+            });
+
+            $(".button_delete_address").click(function () {
+                const hash = $('#' + $(this).data('hash'));
+                Swal.fire({
+                    title: 'Deseja mesmo excluir?',
+                    text: "Não poderá retornar a execução.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sim, quero excluir!',
+                    cancelButtonText: 'Cancelar',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+
+                        return fetch($.ajax({
+                            url: '/system/customer/address/' + hash[0].id,
+                            method: 'DELETE',
+                            success: function (data) {
+                                if (data) {
+                                    alert('Endereço excluído')
+                                }
+                            }
+                        })).then(response => {
+                            hash.remove();
+                            location.reload(false)
+                        }).catch(error => {
+                            location.reload(false)
+                        })
+
+                    }
+                });
+            });
+
+            $(".button_delete_card").click(function () {
+                const hash = $('#' + $(this).data('hash'));
+                Swal.fire({
+                    title: 'Deseja mesmo excluir?',
+                    text: "Não poderá retornar a execução.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sim, quero excluir!',
+                    cancelButtonText: 'Cancelar',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+
+                        return fetch($.ajax({
+                            url: '/system/customer/card/' + hash[0].id,
+                            method: 'DELETE',
+                            success: function (data) {
+                                if (data) {
+                                    alert('Cartão excluído')
+                                }
+                            }
+                        })).then(response => {
+                            hash.remove();
+                            location.reload(false)
+                        }).catch(error => {
+                            location.reload(false)
+                        })
+
+                    }
+                });
+            });
+        });
+
+        $("#form-update").validate();
+    </script>
+{% endblock %}
