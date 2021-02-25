@@ -41,7 +41,7 @@ class ScenarioInitialRegistersTest extends DbMaster
             ],
             'companies' => [
                 0 => [
-                    'name' => 'LEOZ',
+                    'name' => 'LYON',
                     'document' => '123.456.678',
                 ],
                 1 => [
@@ -285,7 +285,7 @@ class ScenarioInitialRegistersTest extends DbMaster
         $company = $register->register($this->data['companies'][0]);
 
         self::assertInstanceOf(Company::class, $company);
-        self::assertEquals('LEOZ', $company->getName());
+        self::assertEquals('LYON', $company->getName());
         self::assertEquals('123.456.678', $company->getDocument());
         self::assertEquals(Company::COMPANY_STATUS_ACTIVE, $company->getStatus());
         self::assertEquals(1, $company->getId());
@@ -308,7 +308,7 @@ class ScenarioInitialRegistersTest extends DbMaster
 
         self::assertInstanceOf(Company::class, $company);
         self::assertEquals('Empresa02', $company->getName());
-        self::assertNotEquals('LEOZ', $company->getName());
+        self::assertNotEquals('LYON', $company->getName());
         self::assertEquals('098.765.432', $company->getDocument());
         self::assertEquals(Company::COMPANY_STATUS_INACTIVE, $company->getStatus());
         return $company;
